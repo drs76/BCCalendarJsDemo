@@ -1,0 +1,101 @@
+/* https://docs.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-control-addin-style */
+
+
+/* set the default green, amber red colour's to be used. */
+
+:root {
+    --far-color: red;
+    --close-color: green;
+    --amber-color: orange;
+}
+
+.far {
+    background-color: var(--far-color);
+}
+
+.close {
+    background-color: var(--close-color);
+}
+
+.amber {
+    background-color: var(--amber-color);
+}
+
+#external-events-title {
+    position: fixed;
+    z-index: 1;
+    top: 55px;
+    left: 2px;
+    min-width: 185px;
+    max-width: 200px;
+    height: 40px;
+    padding: 0 2px;
+    overflow: hidden;
+    text-align: center;
+    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
+    font-size: 16pt;
+    font-weight: bolder;
+}
+
+#external-events {
+    position: fixed;
+    z-index: 2;
+    top: 85px;
+    left: 2px;
+    min-width: 185px;
+    max-width: 200px;
+    height: 100%;
+    padding: 0 2px 2px 0;
+    overflow-y: auto;
+    text-align: center;
+    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+}
+
+#external-events .fc-event {
+    display: flex;
+    overflow: hidden;
+    height: auto;
+    margin: 10px 0;
+    cursor: pointer;
+    text-align: center;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    align-items: center;
+    justify-content: center;
+    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+    white-space: pre;
+}
+
+[draggable="true"] {
+    color: black;
+    cursor: move;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    white-space: pre;
+    text-align: center;
+}
+
+[draggable="true"]:active {
+    color: black;
+    cursor: move;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    white-space: pre;
+    text-align: center;
+}
+
+#calendar-container {
+    position: relative;
+    z-index: 3;
+    margin-left: 205px;
+    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+}
