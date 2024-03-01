@@ -4,16 +4,11 @@
 controladdin PTEFullCalendarControl
 {
 
-    Scripts = 'src/controladdins/calendar/lib/main.min.js',
+    Scripts = 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
                 'src/controladdins/calendar/scripts/fullCalendar.js';
 
     StartupScript = 'src/controladdins/calendar/scripts/fullCalendarStart.js';
 
-    StyleSheets = 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css',
-                    'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css',
-                    'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css',
-                    'src/controladdins/calendar/lib/main.min.css',
-                    'src/controladdins/calendar/scripts/styles.css';
     VerticalShrink = true;
     HorizontalShrink = true;
     VerticalStretch = true;
@@ -60,7 +55,7 @@ controladdin PTEFullCalendarControl
     /// GetOpenCalendarEntryResult.
     /// Return result from open calendar entry page.
     /// </summary>
-    /// <param name="Result">JsonObject.</param>    
+    /// <param name="Result">JsonObject.</param>
     procedure OpenCalendarEntryResult(Result: JsonObject);
 
     /// <summary>

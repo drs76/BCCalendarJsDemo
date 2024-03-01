@@ -1,7 +1,7 @@
 /// <summary>
 /// Page PTEFullCalendarDemo (ID 50101).
 /// </summary>
-page 50101 PTEFullCalendarDemo
+page 50200 PTEFullCalendarDemo
 {
     Caption = 'FullCalendar Demo';
     AdditionalSearchTerms = 'Javascript calendar';
@@ -128,7 +128,7 @@ page 50101 PTEFullCalendarDemo
         SalesHeader.SetRange(Status, SalesHeader.Status::Open);
         SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
         SalesHeader.SetFilter("Shipping Agent Code", '<>%1', '');
-        //TODO: Add back in 
+        //TODO: Add back in
         SalesHeader.SetRange("Shipment Date", FirstDate, LastDate);
         if not SalesHeader.FindSet() then
             exit;
@@ -146,7 +146,7 @@ page 50101 PTEFullCalendarDemo
     var
         SalesHeader: Record "Sales Header";
     begin
-        Clear(ExternalEventMgt); // clear external 
+        Clear(ExternalEventMgt); // clear external
         SalesHeader.SetRange(Status, SalesHeader.Status::Open);
         SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
         SalesHeader.SetRange("Shipping Agent Code", '');
@@ -171,7 +171,7 @@ page 50101 PTEFullCalendarDemo
         ResourceMgt.SetEventBackgroundColor(ShippingAgent.PTECalendarBackground);
         ResourceMgt.SetBackgroundColour(ShippingAgent.PTECalendarBackground);
 
-        //Resource Event constraint is the allowed hours an event can be booked for this resource. 
+        //Resource Event constraint is the allowed hours an event can be booked for this resource.
         BusinessHours := FullCalendarHelper.CreateConstraint(ShippingAgent.PTEOpeningTime, ShippingAgent.PTEClosingTime, ShippingAgent.PTEDays);
         ResourceMgt.SetEventContstraint(BusinessHours);
         // add new resource to the collection
@@ -230,7 +230,7 @@ page 50101 PTEFullCalendarDemo
 
     /// <summary>
     /// OpenCalendarEntry.
-    /// This is called async so we must always call CurrPage.FullCalendar.HandleExternalDraggedEventResult 
+    /// This is called async so we must always call CurrPage.FullCalendar.HandleExternalDraggedEventResult
     /// as the calendar is awaiting a response, even if nothing is done.
     /// </summary>
     /// <param name="Entry">JsonObject.</param>
@@ -313,7 +313,7 @@ page 50101 PTEFullCalendarDemo
 
     /// <summary>
     /// SetupCalendar.
-    /// Create the CalendarSetupMgt codeunit options which will be passed to the calendar as a JsonObject. 
+    /// Create the CalendarSetupMgt codeunit options which will be passed to the calendar as a JsonObject.
     /// </summary>
     local procedure SetupCalendar()
     var

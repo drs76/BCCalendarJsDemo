@@ -2,7 +2,7 @@
 /// Codeunit PTEJsonHelper (ID 50101).
 /// Json Helper Codeunit.
 /// </summary>
-codeunit 50101 PTEJsonHelper
+codeunit 50201 PTEJsonHelper
 {
     /// <summary>
     /// UpdateJsonObjectField.

@@ -1,7 +1,7 @@
 /// <summary>
 /// TableExtension PTEShippingAgent (ID 50100) extends Record Shipping Agent.
 /// </summary>
-tableextension 50147 PTEShippingAgent extends "Shipping Agent"
+tableextension 50201 PTEShippingAgent extends "Shipping Agent"
 {
     fields
     {

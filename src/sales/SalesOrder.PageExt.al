@@ -1,7 +1,7 @@
 /// <summary>
 /// PageExtension PTESalesOrder (ID 50100) extends Record Sales Order.
 /// </summary>
-pageextension 50148 PTESalesOrder extends "Sales Order"
+pageextension 50200 PTESalesOrder extends "Sales Order"
 {
     layout
     {

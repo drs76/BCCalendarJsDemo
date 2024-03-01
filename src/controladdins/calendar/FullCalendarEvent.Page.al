@@ -1,7 +1,7 @@
 /// <summary>
 /// Page PTEFullCalendarEvent (ID 50102).
 /// </summary>
-page 50102 PTEFullCalendarEvent
+page 50201 PTEFullCalendarEvent
 {
     Caption = 'Calendar Event';
     PageType = NavigatePage;
@@ -186,12 +186,8 @@ page 50102 PTEFullCalendarEvent
         ColorLbl: Label 'backgroundColor';
         ResourceIdLbl: Label 'resourceId';
         TextColorLbl: Label 'textColor';
-
-        [InDataSet]
         EditEndDate: Boolean;
-        [InDataSet]
         Background: Text;
-        [InDataSet]
         TextColor: Text;
 
 
@@ -311,7 +307,7 @@ page 50102 PTEFullCalendarEvent
 
     /// <summary>
     /// SetControls.
-    /// </summary> 
+    /// </summary>
     local procedure SetControls()
     begin
         EditEndDate := not AllDay;

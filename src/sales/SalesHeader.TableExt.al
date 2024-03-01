@@ -1,7 +1,7 @@
 /// <summary>
 /// TableExtension PTESalesHeader (ID 50101) extends Record Sales Header.
 /// </summary>
-tableextension 50101 PTESalesHeader extends "Sales Header"
+tableextension 50200 PTESalesHeader extends "Sales Header"
 {
     fields
     {

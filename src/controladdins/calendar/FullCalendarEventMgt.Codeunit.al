@@ -3,7 +3,7 @@
 /// Codeunit PTEFullCalendarEventMgt (ID 50102).
 /// https://fullcalendar.io/docs/event-object
 /// </summary>
-codeunit 50102 PTEFullCalendarEventMgt
+codeunit 50202 PTEFullCalendarEventMgt
 {
     var
         EventCollection: Dictionary of [Text, Text];
@@ -359,7 +359,7 @@ codeunit 50102 PTEFullCalendarEventMgt
 
     /// <summary>
     /// SetEventAllow.
-    /// 
+    ///
     /// </summary>
     /// <param name="EventAllow">Boolean.</param>
     internal procedure SetEventAllow(EventAllow: Boolean)

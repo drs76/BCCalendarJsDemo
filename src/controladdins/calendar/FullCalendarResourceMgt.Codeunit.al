@@ -3,7 +3,7 @@
 /// Codeunit PTEFullCalendarResourceMgt (ID 50100).
 /// Wrapper for FullCalendar Resources
 /// </summary>
-codeunit 50100 PTEFullCalendarResourceMgt
+codeunit 50200 PTEFullCalendarResourceMgt
 {
     var
         ResourceCollection: Dictionary of [Text, Text];

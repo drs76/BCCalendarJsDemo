@@ -1,7 +1,7 @@
 /// <summary>
 /// PageExtension PTEShippingAgents (ID 50147) extends Record Shipping Agents.
 /// </summary>
-page 50147 PTEShippingAgentsCalendarInfo
+page 50202 PTEShippingAgentsCalendarInfo
 {
     Caption = 'Shipping Agents - Calendar Setup';
     UsageCategory = Administration;

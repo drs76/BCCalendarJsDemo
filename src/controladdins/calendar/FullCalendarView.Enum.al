@@ -1,7 +1,7 @@
 /// <summary>
 /// Enum PTEFullCalendarView (ID 50100).
 /// </summary>
-enum 50100 PTEFullCalendarView
+enum 50200 PTEFullCalendarView
 {
     Extensible = true;
 

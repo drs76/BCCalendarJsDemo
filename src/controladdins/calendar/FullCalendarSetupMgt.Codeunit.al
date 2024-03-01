@@ -2,7 +2,7 @@
 /// Codeunit PTEFullCalendarSetupMgt (ID 50104).
 /// Holds setup for the FullCalendar
 /// </summary>
-codeunit 50104 PTEFullCalendarSetupMgt
+codeunit 50204 PTEFullCalendarSetupMgt
 {
     var
         CalendarSetup: JsonObject;

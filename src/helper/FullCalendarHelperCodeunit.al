@@ -1,11 +1,11 @@
 /// <summary>
 /// Codeunit PTEFullCalendarHelper (ID 50103).
 /// </summary>
-codeunit 50103 PTEFullCalendarHelper
+codeunit 50203 PTEFullCalendarHelper
 {
     /// <summary>
     /// CreateConstraint.
-    /// DaysOfWeek is zero based array 0=Sunday. 
+    /// DaysOfWeek is zero based array 0=Sunday.
     /// Pass days as text in brackets i.e. [1,2,3,4,5,6,0] = Mon-Sun
     /// </summary>
     /// <param name="StartTime">Time.</param>

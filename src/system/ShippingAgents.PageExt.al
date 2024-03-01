@@ -1,7 +1,7 @@
 /// <summary>
 /// PageExtension PTEShippingAgents (ID 50100) extends Record Shipping Agents.
 /// </summary>
-pageextension 50149 PTEShippingAgents extends "Shipping Agents"
+pageextension 50201 PTEShippingAgents extends "Shipping Agents"
 {
     actions
     {

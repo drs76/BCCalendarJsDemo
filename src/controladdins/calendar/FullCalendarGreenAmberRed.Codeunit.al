@@ -3,7 +3,7 @@
 /// Codeunit PTEFullCalendarGreenAmberRed (ID 50145).
 /// https://fullcalendar.io/docs/GAR-object
 /// </summary>
-codeunit 50145 PTEFullCalendarGreenAmberRed
+codeunit 50205 PTEFullCalendarGreenAmberRed
 {
     var
         GARCollection: Dictionary of [Text, Text];
