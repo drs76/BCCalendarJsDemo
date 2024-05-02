@@ -3,30 +3,25 @@ let setup;
 let bccalendar;
 let draggable;
 
-
 function InitCalendar(settings, enableDraggable) {
     setup = settings;
     setupIFrame();
     setupControlAddIn(enableDraggable);
     setupCalendar();
-
-    //if (enableDraggable) {
-        //setupDraggable();
-    //}
     alert('7');
 }
 
 function setupIFrame() {
     let iframe = window.frameElement;
 
-    setFlexStyles(iframe.parentElement, ['flex-direction', 'column', '1']);
-    setFlexStyles(iframe, ['height'], '100%');
+    applyFlexStyles(iframe.parentElement, ['flex-direction', 'column', '1']);
+    applyFlexStyles(iframe, ['height'], '99%');
     removeStyles(iframe, ['min-height', 'max-height']);
-    setFlexStyles(iframe, ['flex-grow', 'flex-shrink', 'flex-basis'], ['1', '1', 'auto']);
+    applyFlexStyles(iframe, ['flex-grow', 'flex-shrink', 'flex-basis'], ['1', '1', 'auto']);
     iframe.style.paddingBottom = '42px';
 }
 
-function setFlexStyles(element, properties, values) {
+function applyFlexStyles(element, properties, values) {
     if (!Array.isArray(properties)) properties = [properties];
     if (!Array.isArray(values)) values = [values];
 
@@ -46,34 +41,21 @@ function removeStyles(element, properties) {
 function setupControlAddIn(enableDraggable) {
     let controlAddIn = document.getElementById("controlAddIn");
 
-    // if (enableDraggable) {
-    //     let hHeader = document.createElement("h4");
-    //     hHeader.textContent = setup.dragEventTitle;
-    //     controlAddIn.appendChild(hHeader);
+    let calendarContainer = createDiv();
+    calendarContainer.id = 'calendar-container';
+    calendarContainer.innerHTML = '';
 
-    //     let externalEvents = document.createElement('div');
-    //     externalEvents.id = 'external-events';
-    //     externalEvents.innerHTML = '';
-    //     controlAddIn.appendChild(externalEvents);
+    let calendarElement = createDiv();
+    calendarElement.id = 'calendar';
+    calendarElement.innerHTML = '';
 
-    //     populateExternalEvents();
-    // }
-
-    let calendarContEl = createDiv();
-    calendarContEl.id = 'calendar-container';
-    calendarContEl.innerHTML = '';
-
-    let calendarEl = createDiv();
-    calendarEl.id = 'calendar';
-    calendarEl.innerHTML = '';
-
-    calendarContEl.appendChild(calendarEl);
-    controlAddIn.appendChild(calendarContEl);
+    calendarContainer.appendChild(calendarElement);
+    controlAddIn.appendChild(calendarContainer);
 }
 
 function createDiv() {
     let newDiv = document.createElement('div');
-    setFlexStyles(newDiv, ['height', 'flex-grow', 'flex-shrink', 'flex-basis'], ['100%', '1', '1', 'auto']);
+    applyFlexStyles(newDiv, ['height', 'flex-grow', 'flex-shrink', 'flex-basis'], ['99%', '1', '1', 'auto']);
     return newDiv;
 }
 
@@ -92,8 +74,9 @@ function setupDraggable() {
 
 function setupCalendar() {
     var calendarEl = document.getElementById("calendar");
-    var bccalendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth'
+    bccalendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        themeSystem: 'flatly',
     });
     bccalendar.render();
 

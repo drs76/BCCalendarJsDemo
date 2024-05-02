@@ -1,13 +1,15 @@
 /// <summary>
-/// ControlAddIn PTEFullCalendarControl.
+/// ControlAddIn PTECalendarJsControl.
 /// </summary>
-controladdin PTEFullCalendarControl
+controladdin PTECalendarjsControl
 {
 
-    Scripts = 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js',
-                'src/controladdins/calendar/scripts/fullCalendar.js';
+    Scripts = 'src/controladdins/calendar/calendarjs/dist/calendar.min.js',
+              'src/controladdins/calendar/scripts/ptecalendarjs.js';
 
-    StartupScript = 'src/controladdins/calendar/scripts/fullCalendarStart.js';
+    StartupScript = 'src/controladdins/calendar/scripts/ptecalendarjs_start.js';
+
+    StyleSheets = 'src/controladdins/calendar/calendarjs/dist/calendar.js.min.css';
 
     VerticalShrink = true;
     HorizontalShrink = true;

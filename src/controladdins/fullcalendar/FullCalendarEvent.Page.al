@@ -309,6 +309,8 @@ page 50201 PTEFullCalendarEvent
     /// SetControls.
     /// </summary>
     local procedure SetControls()
+    var
+    RClient: Codeunit "Rest Client";
     begin
         EditEndDate := not AllDay;
         if Control1Ready then
