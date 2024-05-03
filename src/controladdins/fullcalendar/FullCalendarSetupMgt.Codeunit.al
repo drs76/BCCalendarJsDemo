@@ -437,7 +437,7 @@ codeunit 50204 PTEFullCalendarSetupMgt
     /// <param name="SetupValue">Variant.</param>
     local procedure UpdateValue(SetupProperty: Text; SetupValue: Variant)
     var
-        JsonHelper: Codeunit PTEJsonHelper;
+        JsonHelper: Codeunit PTECalendarJsJsonHelper;
     begin
         JsonHelper.UpdateJsonObjectField(CalendarSetup, SetupProperty, SetupValue);
     end;

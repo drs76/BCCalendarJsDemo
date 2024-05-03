@@ -1,17 +1,5 @@
-/// <summary>
-/// Codeunit PTEFullCalendarHelper (ID 50103).
-/// </summary>
-codeunit 50203 PTEFullCalendarHelper
+codeunit 50203 PTECalendarJsHelper
 {
-    /// <summary>
-    /// CreateConstraint.
-    /// DaysOfWeek is zero based array 0=Sunday.
-    /// Pass days as text in brackets i.e. [1,2,3,4,5,6,0] = Mon-Sun
-    /// </summary>
-    /// <param name="StartTime">Time.</param>
-    /// <param name="EndTime">Time.</param>
-    /// <param name="DaysOfWeek">Text.</param>
-    /// <returns>Return variable Constraint of type JsonObject.</returns>
     internal procedure CreateConstraint(StartTime: Time; EndTime: Time; DaysOfWeek: Text) Constraint: JsonObject
     var
         StartTimeLbl: Label 'startTime';
@@ -26,12 +14,6 @@ codeunit 50203 PTEFullCalendarHelper
             Constraint.Add(DaysOfWeekLbl, DaysOfWeek);
     end;
 
-    /// <summary>
-    /// GetCalendarDateRange.
-    /// </summary>
-    /// <param name="fetchInfo">JsonObject.</param>
-    /// <param name="FirstDate">VAR Date.</param>
-    /// <param name="LastDate">VAR Date.</param>
     internal procedure GetCalendarDateRange(fetchInfo: JsonObject; var FirstDate: Date; var LastDate: Date)
     var
         JToken: JsonToken;
@@ -50,11 +32,6 @@ codeunit 50203 PTEFullCalendarHelper
             if Evaluate(LastDate, CopyStr(JToken.AsValue().AsText(), 1, 10)) then;
     end;
 
-    /// <summary>
-    /// BuildAddressString
-    /// </summary>
-    /// <param name="SalesHeader">Record "Sales Header".</param>
-    /// <returns>Text.</returns>
     internal procedure BuildAddressString(SalesHeader: Record "Sales Header"): Text
     var
         AddressTB: TextBuilder;
@@ -72,11 +49,6 @@ codeunit 50203 PTEFullCalendarHelper
         exit(AddressTB.ToText());
     end;
 
-    /// <summary>
-    /// AddAddressLine
-    /// </summary>
-    /// <param name="AddressTB">TextBuilder.</param>
-    /// <param name="AddressLine">Text.</param>
     local procedure AddAddressLine(var AddressTB: TextBuilder; AddressLine: Text)
     var
         EmptyTxt: Label '';
@@ -85,13 +57,6 @@ codeunit 50203 PTEFullCalendarHelper
             AddressTB.AppendLine(AddressLine);
     end;
 
-    /// <summary>
-    /// GetEventDate.
-    /// Demo function
-    /// </summary>
-    /// <param name="ShipDate">Date.</param>
-    /// <param name="ShipTime">Time.</param>
-    /// <returns>Return value of type Text.</returns>
     internal procedure GetEventDate(ShipDate: Date; ShipTime: Time): DateTime
     begin
         exit(CreateDateTime(ShipDate, ShipTime));

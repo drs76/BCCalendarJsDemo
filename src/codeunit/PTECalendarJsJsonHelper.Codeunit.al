@@ -1,15 +1,5 @@
-/// <summary>
-/// Codeunit PTEJsonHelper (ID 50101).
-/// Json Helper Codeunit.
-/// </summary>
-codeunit 50201 PTEJsonHelper
+codeunit 50201 PTECalendarJsJsonHelper
 {
-    /// <summary>
-    /// UpdateJsonObjectField.
-    /// </summary>
-    /// <param name="JObject">VAR JsonObject.</param>
-    /// <param name="Property">Text.</param>
-    /// <param name="ValueToSet">Variant.</param>
     procedure UpdateJsonObjectField(var JObject: JsonObject; Property: Text; ValueToSet: Variant)
     var
         JObject2: JsonObject;

@@ -433,7 +433,7 @@ codeunit 50202 PTEFullCalendarEventMgt
     /// <param name="EventValue">Variant.</param>
     local procedure UpdateValue(EventProperty: Text; EventValue: Variant)
     var
-        JsonHelper: Codeunit PTEJsonHelper;
+        JsonHelper: Codeunit PTECalendarJsJsonHelper;
     begin
         JsonHelper.UpdateJsonObjectField(CurrentEvent, EventProperty, EventValue);
     end;
@@ -446,7 +446,7 @@ codeunit 50202 PTEFullCalendarEventMgt
     /// <param name="EventValue">Variant.</param>
     local procedure UpdateExtendedProps(EventProperty: Text; EventValue: Variant)
     var
-        JsonHelper: Codeunit PTEJsonHelper;
+        JsonHelper: Codeunit PTECalendarJsJsonHelper;
         ExtProps: JsonObject;
         JToken: JsonToken;
     begin

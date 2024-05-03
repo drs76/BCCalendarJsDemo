@@ -1,6 +1,3 @@
-/// <summary>
-/// Page PTECalendarDemo (ID 50101).
-/// </summary>
 page 50203 PTECalendarDemo
 {
     Caption = 'Calendar Demo';
@@ -23,12 +20,6 @@ page 50203 PTECalendarDemo
                     SetupCalendar();
                 end;
 
-                /// <summary>
-                /// GetEvents.
-                /// Called when event data is required, changing of date range/view.
-                /// The fetchInfo contains the start and end dates for the calendar range being displayed.
-                /// </summary>
-                /// <param name="fetchInfo">JsonObject.</param>
                 trigger GetEvents(fetchInfo: JsonObject)
                 begin
                     Clear(EventMgt);
@@ -188,7 +179,7 @@ page 50203 PTECalendarDemo
     /// </summary>
     local procedure SetupCalendar()
     var
-        FullCalHelper: Codeunit PTEFullCalendarHelper;
+        FullCalHelper: Codeunit PTECalendarJsHelper;
         BusinessHours: JsonObject;
         DaysOfWeekTxt: Label '[1,2,3,4,5]';// Mon-Fri
     begin
@@ -211,7 +202,7 @@ page 50203 PTECalendarDemo
         CalendarSetupMgt: Codeunit PTEFullCalendarSetupMgt;
         EventMgt: Codeunit PTEFullCalendarEventMgt;
         ExternalEventMgt: Codeunit PTEFullCalendarEventMgt;
-        FullCalendarHelper: Codeunit PTEFullCalendarHelper;
+        FullCalendarHelper: Codeunit PTECalendarJsHelper;
         SourceType: Option Resource,Events,External,"Resource+Events";
         EmptyTxt: Label '';
         IdLbl: Label 'id';
