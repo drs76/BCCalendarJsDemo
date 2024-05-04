@@ -1,5 +1,39 @@
 codeunit 50203 PTECalendarJsHelper
 {
+    internal procedure GetCalendarSettings() ReturnValue: JsonObject
+    var
+        CalendarJsSetup: Record PTECalendarJsSetup;
+        CalendarJsJsonHelper: Codeunit PTECalendarJsJsonHelper;
+    begin
+        CalendarJsSetup.SetRange(Default, true);
+        if not CalendarJsSetup.FindFirst() then
+            exit;
+
+        ReturnValue := CalendarJsJsonHelper.RecordToJson(CalendarJsSetup, false);
+    end;
+
+    internal procedure GetCalendarSearchSettings(CalCode: Code[20]) ReturnValue: JsonObject
+    var
+        CalendarJsSearchOption: Record PTECalendarJsSearchOption;
+        CalendarJsJsonHelper: Codeunit PTECalendarJsJsonHelper;
+    begin
+        if not CalendarJsSearchOption.Get(CalCode) then
+            exit;
+
+        ReturnValue := CalendarJsJsonHelper.RecordToJson(CalendarJsSearchOption, false);
+    end;
+
+    internal procedure GetCalendarViewSettings(CalCode: Code[20]; ViewType: Enum PTECalendarJSViews) ReturnValue: JsonObject
+    var
+        CalendarJsViewOption: Record PTECalendarJsViewOption;
+        CalendarJsJsonHelper: Codeunit PTECalendarJsJsonHelper;
+    begin
+        if not CalendarJsViewOption.Get(CalCode, ViewType) then
+            exit;
+
+        ReturnValue := CalendarJsJsonHelper.RecordToJson(CalendarJsViewOption, false);
+    end;
+
     internal procedure CreateConstraint(StartTime: Time; EndTime: Time; DaysOfWeek: Text) Constraint: JsonObject
     var
         StartTimeLbl: Label 'startTime';

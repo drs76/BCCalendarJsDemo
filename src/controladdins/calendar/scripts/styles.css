@@ -1,101 +1,55 @@
-/* https://docs.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-control-addin-style */
-
-
-/* set the default green, amber red colour's to be used. */
-
-:root {
-    --far-color: red;
-    --close-color: green;
-    --amber-color: orange;
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background-color: #DDDDDD !important;
 }
 
-.far {
-    background-color: var(--far-color);
+a,
+a:visited {
+    color: blue;
 }
 
-.close {
-    background-color: var(--close-color);
+div.header {
+    background-color: #AAAAAA !important;
+    color: black !important;
+    padding: 10px !important;
+    border-bottom: 1px black solid !important;
+    margin-block-start: 0 !important;
+    margin-block-end: 0 !important;
+    margin: 0 !important;
 }
 
-.amber {
-    background-color: var(--amber-color);
+div.header h1,
+div.header p {
+    margin: 0;
+    padding: 0;
 }
 
-#external-events-title {
-    position: fixed;
-    z-index: 1;
-    top: 55px;
-    left: 2px;
-    min-width: 185px;
-    max-width: 200px;
-    height: 40px;
-    padding: 0 2px;
-    overflow: hidden;
-    text-align: center;
-    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
-    font-size: 16pt;
-    font-weight: bolder;
+div.header h1 {
+    margin-bottom: 8px;
+    font-weight: 700;
 }
 
-#external-events {
-    position: fixed;
-    z-index: 2;
-    top: 85px;
-    left: 2px;
-    min-width: 185px;
-    max-width: 200px;
-    height: 100%;
-    padding: 0 2px 2px 0;
-    overflow-y: auto;
-    text-align: center;
-    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
-    font-size: 10.5pt;
+h2 {
+    display: block !important;
+    font-size: 1.5em !important;
+    margin-block-start: 0.83em !important;
+    margin-block-end: 0.83em !important;
+    margin-inline-start: 0 !important;
+    margin-inline-end: 0 !important;
+    font-weight: bold !important;
 }
 
-#external-events .fc-event {
-    display: flex;
-    overflow: hidden;
-    height: auto;
-    margin: 10px 0;
-    cursor: pointer;
-    text-align: center;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    align-items: center;
-    justify-content: center;
-    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
-    font-size: 10.5pt;
-    white-space: pre;
+div.contents {
+    padding: 10px;
 }
 
-[draggable="true"] {
-    color: black;
-    cursor: move;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    white-space: pre;
-    text-align: center;
+button {
+    margin: 3px !important;
 }
 
-[draggable="true"]:active {
-    color: black;
-    cursor: move;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    white-space: pre;
-    text-align: center;
-}
-
-#calendar-container {
-    position: relative;
-    z-index: 3;
-    margin-left: 205px;
-    font-family: "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
-    font-size: 10.5pt;
+div.date-picker {
+    margin-top: 20px;
+    background-color: #AAAAAA;
+    padding: 10px;
 }

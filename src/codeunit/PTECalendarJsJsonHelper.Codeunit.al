@@ -1,6 +1,6 @@
 codeunit 50201 PTECalendarJsJsonHelper
 {
-    procedure UpdateJsonObjectField(var JObject: JsonObject; Property: Text; ValueToSet: Variant)
+    internal procedure UpdateJsonObjectField(var JObject: JsonObject; Property: Text; ValueToSet: Variant)
     var
         JObject2: JsonObject;
         JArray: JsonArray;
@@ -47,12 +47,6 @@ codeunit 50201 PTECalendarJsJsonHelper
         end;
     end;
 
-    /// <summary>
-    /// SetJsonIntField.
-    /// </summary>
-    /// <param name="JObject">VAR JsonObject.</param>
-    /// <param name="Property">Text.</param>
-    /// <param name="ValueToSet">Integer.</param>
     local procedure SetJsonIntField(var JObject: JsonObject; Property: Text; ValueToSet: Integer)
     begin
         if not JObject.Contains(Property) then
@@ -61,12 +55,6 @@ codeunit 50201 PTECalendarJsJsonHelper
             JObject.Replace(Property, ValueToSet);
     end;
 
-    /// <summary>
-    /// SetJsonDecField.
-    /// </summary>
-    /// <param name="JObject">VAR JsonObject.</param>
-    /// <param name="Property">Text.</param>
-    /// <param name="ValueToSet">Decimal.</param>
     local procedure SetJsonDecField(var JObject: JsonObject; Property: Text; ValueToSet: Decimal)
     begin
         if not JObject.Contains(Property) then
@@ -75,12 +63,6 @@ codeunit 50201 PTECalendarJsJsonHelper
             JObject.Replace(Property, ValueToSet);
     end;
 
-    /// <summary>
-    /// SetJsonObjectField.
-    /// </summary>
-    /// <param name="JObject">VAR JsonObject.</param>
-    /// <param name="Property">Text.</param>
-    /// <param name="ValueToSet">JsonObject.</param>
     local procedure SetJsonObjectField(var JObject: JsonObject; Property: Text; ValueToSet: JsonObject)
     begin
         if not JObject.Contains(Property) then
@@ -89,12 +71,6 @@ codeunit 50201 PTECalendarJsJsonHelper
             JObject.Replace(Property, ValueToSet);
     end;
 
-    /// <summary>
-    /// SetJsonArrayField.
-    /// </summary>
-    /// <param name="JObject">VAR JsonObject.</param>
-    /// <param name="Property">Text.</param>
-    /// <param name="ValueToSet">JsonArray.</param>
     local procedure SetJsonArrayField(var JObject: JsonObject; Property: Text; ValueToSet: JsonArray)
     begin
         if not JObject.Contains(Property) then
@@ -103,12 +79,6 @@ codeunit 50201 PTECalendarJsJsonHelper
             JObject.Replace(Property, ValueToSet);
     end;
 
-    /// <summary>
-    /// SetJsonBooleanField.
-    /// </summary>
-    /// <param name="JObject">VAR JsonObject.</param>
-    /// <param name="Property">Text.</param>
-    /// <param name="ValueToSet">Boolean.</param>
     local procedure SetJsonBooleanField(var JObject: JsonObject; Property: Text; ValueToSet: Boolean)
     begin
         if not JObject.Contains(Property) then
@@ -117,13 +87,7 @@ codeunit 50201 PTECalendarJsJsonHelper
             JObject.Replace(Property, ValueToSet);
     end;
 
-    /// <summary>
-    /// GetJsonTextField.
-    /// </summary>
-    /// <param name="JObject">JsonObject.</param>
-    /// <param name="KeyName">Text.</param>
-    /// <returns>Return value of type Text.</returns>
-    procedure GetJsonTextField(JObject: JsonObject; KeyName: Text): Text
+    internal procedure GetJsonTextField(JObject: JsonObject; KeyName: Text): Text
     var
         Result: JsonToken;
     begin
@@ -131,13 +95,7 @@ codeunit 50201 PTECalendarJsJsonHelper
             exit(Result.AsValue().AsText());
     end;
 
-    /// <summary>
-    /// GetJsonIntegerField.
-    /// </summary>
-    /// <param name="JObject">JsonObject.</param>
-    /// <param name="KeyName">Text.</param>
-    /// <returns>Return value of type Integer.</returns>
-    procedure GetJsonIntegerField(JObject: JsonObject; KeyName: Text): Integer
+    internal procedure GetJsonIntegerField(JObject: JsonObject; KeyName: Text): Integer
     var
         Result: JsonToken;
     begin
@@ -145,13 +103,7 @@ codeunit 50201 PTECalendarJsJsonHelper
             exit(Result.AsValue().AsInteger());
     end;
 
-    /// <summary>
-    /// GetJsonDecimalField.
-    /// </summary>
-    /// <param name="JObject">JsonObject.</param>
-    /// <param name="KeyName">Text.</param>
-    /// <returns>Return value of type Decimal.</returns>
-    procedure GetJsonDecimalField(JObject: JsonObject; KeyName: Text): Decimal
+    internal procedure GetJsonDecimalField(JObject: JsonObject; KeyName: Text): Decimal
     var
         Result: JsonToken;
     begin
@@ -159,13 +111,7 @@ codeunit 50201 PTECalendarJsJsonHelper
             exit(Result.AsValue().AsDecimal());
     end;
 
-    /// <summary>
-    /// GetJsonObjectField.
-    /// </summary>
-    /// <param name="JObject">JsonObject.</param>
-    /// <param name="KeyName">Text.</param>
-    /// <returns>Return value of type JsonObject.</returns>
-    procedure GetJsonObjectField(JObject: JsonObject; KeyName: Text): JsonObject
+    internal procedure GetJsonObjectField(JObject: JsonObject; KeyName: Text): JsonObject
     var
         Result: JsonToken;
     begin
@@ -173,13 +119,7 @@ codeunit 50201 PTECalendarJsJsonHelper
             exit(Result.AsObject());
     end;
 
-    /// <summary>
-    /// GetJsonArrayField.
-    /// </summary>
-    /// <param name="JObject">JsonObject.</param>
-    /// <param name="KeyName">Text.</param>
-    /// <returns>Return value of type JsonArray.</returns>
-    procedure GetJsonArrayField(JObject: JsonObject; KeyName: Text): JsonArray
+    internal procedure GetJsonArrayField(JObject: JsonObject; KeyName: Text): JsonArray
     var
         Result: JsonToken;
     begin
@@ -187,14 +127,7 @@ codeunit 50201 PTECalendarJsJsonHelper
             exit(Result.AsArray());
     end;
 
-    /// <summary>
-    /// JsonArrayToDictionary.
-    /// </summary>
-    /// <param name="JsonArrayIn">JsonArray.</param>
-    /// <param name="DictionaryOut">VAR Dictionary of [Text, Text].</param>
-    /// <param name="KeyName">Text.</param>
-    /// <param name="ValueName">Text.</param>
-    procedure JsonArrayToDictionary(JsonArrayIn: JsonArray; var DictionaryOut: Dictionary of [Text, Text]; KeyName: Text; ValueName: Text)
+    internal procedure JsonArrayToDictionary(JsonArrayIn: JsonArray; var DictionaryOut: Dictionary of [Text, Text]; KeyName: Text; ValueName: Text)
     var
         ArrayElement: JsonObject;
         JToken: JsonToken;
@@ -211,14 +144,7 @@ codeunit 50201 PTECalendarJsJsonHelper
         end;
     end;
 
-    /// <summary>
-    /// DictionaryToJsonArray.
-    /// </summary>
-    /// <param name="JsonArrayOut">VAR JsonArray.</param>
-    /// <param name="DictionaryIn">Dictionary of [Text, Text].</param>
-    /// <param name="PropertyName">Text.</param>
-    /// <param name="ValueName">Text.</param>
-    procedure DictionaryToJsonArray(var JsonArrayOut: JsonArray; DictionaryIn: Dictionary of [Text, Text]; PropertyName: Text; ValueName: Text)
+    internal procedure DictionaryToJsonArray(var JsonArrayOut: JsonArray; DictionaryIn: Dictionary of [Text, Text]; PropertyName: Text; ValueName: Text)
     var
         ArrayElement: JsonObject;
         DictKey: Text;
@@ -233,6 +159,179 @@ codeunit 50201 PTECalendarJsJsonHelper
             ArrayElement.Add(ValueName, DictValue);
 
             JsonArrayOut.Add(ArrayElement);
+        end;
+    end;
+
+    internal procedure RecordToJson(RecordToConvert: Variant) ReturnValue: JsonObject
+    begin
+        exit(RecordToJson(RecordToConvert, false));
+    end;
+
+    internal procedure RecordToJson(RecordToConvert: Variant; UseSystemFields: Boolean) ReturnValue: JsonObject
+    var
+        Fields: Record Field;
+        RecRef: RecordRef;
+        WrongTypeErr: Label 'RecordToConvert must be type Recored.';
+    begin
+        if not RecordToConvert.IsRecord() then
+            Error(WrongTypeErr);
+
+        RecRef.GetTable(RecordToConvert);
+        if not GetFields(RecRef.Number(), Fields, UseSystemFields) then
+            exit;
+
+        ProcessToJson(RecRef, Fields, ReturnValue);
+    end;
+
+    local procedure ProcessToJson(RecRef: RecordRef; var Fields: Record Field; var ReturnValue: JsonObject)
+    begin
+        repeat
+            AddValueForJsonType(RecRef, Fields, ReturnValue);
+        until Fields.Next() = 0;
+    end;
+
+    local procedure AddValueForJsonType(RecRef: RecordRef; Fields: Record Field; var ReturnValue: JsonObject)
+    var
+        JArray: JsonArray;
+        JObject: JsonObject;
+        TextVal: Text;
+        BooleanValue: Boolean;
+        IntegerValue: Integer;
+        DecimalValue: Decimal;
+        DateValue: Date;
+        TimeValue: Time;
+        DurationValue: Duration;
+        DateTimeValue: DateTime;
+    begin
+        if Fields.Class = Fields.Class::FlowField then
+            RecRef.Field(Fields."No.").CalcField();
+
+        case Fields.Type of
+            Fields.Type::Boolean:
+                if Evaluate(BooleanValue, Format(RecRef.Field(Fields."No.").Value)) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), BooleanValue);
+            Fields.Type::Code, Fields.Type::Text:
+                begin
+                    TextVal := Format(RecRef.Field(Fields."No.").Value);
+                    if StrLen(TextVal) = 0 then begin
+                        ReturnValue.Add(GetSafeFieldName(Fields), Format(RecRef.Field(Fields."No.").Value));
+                        exit;
+                    end;
+
+                    if (CopyStr(TextVal, 1, 1) = '[') and (CopyStr(TextVal, StrLen(TextVal), 1) = ']') then begin
+                        JArray.ReadFrom(TextVal);
+                        ReturnValue.Add(GetSafeFieldName(Fields), JArray);
+                        exit;
+                    end;
+                    if (CopyStr(TextVal, 1, 1) = '{') and (CopyStr(TextVal, StrLen(TextVal), 1) = '}') then begin
+                        JObject.ReadFrom(TextVal);
+                        ReturnValue.Add(GetSafeFieldName(Fields), JObject);
+                        exit;
+                    end;
+                    ReturnValue.Add(GetSafeFieldName(Fields), Format(RecRef.Field(Fields."No.").Value));
+                end;
+            Fields.Type::Integer:
+                if Evaluate(IntegerValue, Format(RecRef.Field(Fields."No.").Value)) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), IntegerValue);
+            Fields.Type::Decimal:
+                if Evaluate(DecimalValue, Format(RecRef.Field(Fields."No.").Value)) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), DecimalValue);
+            Fields.Type::Date:
+                if Evaluate(DateValue, Format(RecRef.Field(Fields."No.").Value)) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), DateValue);
+            Fields.Type::Time:
+                if Evaluate(TimeValue, Format(RecRef.Field(Fields."No.").Value)) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), TimeValue);
+            Fields.Type::Duration:
+                if Evaluate(DurationValue, Format(RecRef.Field(Fields."No.").Value)) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), DurationValue);
+            Fields.Type::DateTime:
+                if Evaluate(DateTimeValue, Format(RecRef.Field(Fields."No.").Value)) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), DateTimeValue);
+            Fields.Type::Option:
+                ReturnValue.Add(GetSafeFieldName(Fields), Format(RecRef.Field(Fields."No.").Value));
+        end;
+    end;
+
+    local procedure GetFields(TableNo: Integer; var Fields: Record Field; UseSystemFields: Boolean): Boolean
+    var
+        CommpanyInfo: Record "Company Information";
+        PinUpViewImageUrlsLbl: Label 'pinUpViewImageUrls';
+        InitialDateTimeLbl: Label 'initialDateTime';
+        DefaultLbl: Label 'Default';
+        DescriptionLbl: Label 'Description';
+    begin
+        Fields.SetRange(TableNo, TableNo);
+        Fields.SetRange(ObsoleteState, Fields.ObsoleteState::No);
+        if not UseSystemFields then begin
+            Fields.SetFilter("No.", '<%1', CommpanyInfo.FieldNo(SystemId));
+            Fields.SetRange(IsPartOfPrimaryKey, false);
+            if TableNo = DataBase::PTECalendarJsSetup then
+                Fields.SetFilter("Field Caption", '<>%1&<>%2&<>%3&<>%4', PinUpViewImageUrlsLbl, InitialDateTimeLbl, DefaultLbl, DescriptionLbl);
+        end;
+        exit(Fields.FindSet());
+    end;
+
+    local procedure GetSafeFieldName(Fields: Record Field) ReturnValue: Text
+    var
+        AppendLbl: Label '%1%2';
+    begin
+        ReturnValue := Fields."Field Caption";
+        ReturnValue := StrSubstNo(AppendLbl, LowerCase(Format(ReturnValue[1])), CopyStr(ReturnValue, 2, StrLen(ReturnValue)));
+    end;
+
+    internal procedure JsonToRecord(var RecRef: RecordRef; JsonText: Text)
+    var
+        EventJO: JsonObject;
+        Prop: Text;
+    begin
+        EventJO.ReadFrom(JsonText);
+        foreach Prop in EventJO.Keys() do
+            ProcessFieldToRec(RecRef, Prop, EventJO);
+    end;
+
+    local procedure ProcessFieldToRec(var RecRef: RecordRef; Prop: Text; EventJO: JsonObject)
+    var
+        Fields: Record Field;
+        TempBlob: Codeunit "Temp Blob";
+        JToken: JsonToken;
+        WriteStream: OutStream;
+        FieldFilterTxt: Label '@%1';
+    begin
+        Fields.SetRange(TableNo, RecRef.Number());
+        Fields.SetFilter(FieldName, FieldFilterTxt, Prop);
+        if not Fields.FindFirst() then
+            exit;
+
+        if Fields.Class = Fields.Class::FlowField then
+            RecRef.Field(Fields."No.").CalcField();
+
+        if Fields.Class = Fields.Type::Blob then
+            RecRef.Field(Fields."No.").CalcField();
+
+        EventJO.Get(Prop, JToken);
+
+        case Fields.Type of
+            Fields.Type::Text, Fields.Type::Code:
+                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsText();
+            Fields.Type::Decimal:
+                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsDecimal();
+            Fields.Type::Integer:
+                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsInteger();
+            Fields.Type::DateTime:
+                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsDateTime();
+            Fields.Type::Date:
+                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsDate();
+            Fields.Type::Time:
+                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsTime();
+            Fields.Type::Boolean:
+                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsBoolean();
+            Fields.Type::Blob:
+                begin
+                    TempBlob.CreateOutStream(WriteStream, TextEncoding::UTF8);
+                    WriteStream.WriteText(JToken.AsValue().AsText());
+                    TempBlob.ToRecordRef(RecRef, Fields."No.");
+                end;
         end;
     end;
 }

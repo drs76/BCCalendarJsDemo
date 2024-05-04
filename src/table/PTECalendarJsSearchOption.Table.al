@@ -80,10 +80,10 @@ table 50202 PTECalendarJsSearchOption
         }
     }
 
-    internal procedure Create(CalendarCode: Code[20])
+    internal procedure Create(CalCode: Code[20])
     begin
         Rec.Init();
-        Rec.CalendarCode := CalendarCode;
+        Rec.CalendarCode := CalCode;
         Rec.Insert(true);
     end;
 }

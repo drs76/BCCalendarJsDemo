@@ -147,10 +147,6 @@ table 50200 PTECalendarJsSetup
             InitValue = '[ 0, 1, 2, 3, 4, 5, 6 ]';
             Editable = false;
         }
-        field(31; InitialDateTime; DateTime)
-        {
-            Caption = 'InitialDateTime';
-        }
         field(32; SearchOptions; Code[20])
         {
             Caption = 'SearchOptions';
@@ -258,6 +254,18 @@ table 50200 PTECalendarJsSetup
         field(100; Default; Boolean)
         {
             Caption = 'Default';
+
+            trigger OnValidate()
+            var
+                CalendarJsSetup: Record PTECalendarJsSetup;
+            begin
+                if Rec.Default then begin
+                    CalendarJsSetup.SetFilter(CalendarCode, '<>%1', Rec.CalendarCode);
+                    CalendarJsSetup.SetRange(Default, true);
+                    if not CalendarJsSetup.IsEmpty() then
+                        CalendarJsSetup.ModifyAll(Default, false);
+                end;
+            end;
         }
         field(101; Description; Text[250])
         {

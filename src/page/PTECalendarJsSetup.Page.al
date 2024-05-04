@@ -26,6 +26,11 @@ page 50204 PTECalendarJsSetup
                     ToolTip = 'Specifies the description for the calendar setup.';
                     Importance = Promoted;
                 }
+                field(Default; Rec.Default)
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Enable to set this as the default calendar setup.';
+                }
             }
 
             group(Options)
@@ -157,18 +162,6 @@ page 50204 PTECalendarJsSetup
                     begin
                         SelectFromEnum.SetForDaysOfWeek(Rec.WeekendDays);
                         Rec.AssistForDaysOfWeek(SelectFromEnum, Rec.WeekendDays);
-                    end;
-                }
-                field(InitialDateTime; Rec.InitialDateTime)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'States the date that the calendar should start from when first loaded (defaults to today).';
-
-                    trigger OnAssistEdit()
-                    var
-                        DTPicker: Page "Date-Time Dialog";
-                    begin
-                        DTPicker.SetDateTime(Rec.InitialDateTime);
                     end;
                 }
                 field(WorkingDays; Rec.WorkingDays)

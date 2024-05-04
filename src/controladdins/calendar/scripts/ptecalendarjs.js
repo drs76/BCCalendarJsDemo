@@ -1,28 +1,19 @@
 /*jshint esversion: 8 */
-let setup;
-let bccalendar;
-let draggable;
+var bccalendar;
+var draggable;
 
-function InitCalendar(settings, enableDraggable) {
-    alert('aettings');
-    setup = settings;
-    alert('done settings');
+function InitCalendar(newcalOptions, enableDraggable) {
     setupIFrame();
-    alert('1');
-    setupControlAddIn(enableDraggable);
-    alert('2');
-    setupCalendar();
-    alert('3');
+    setupCalendar(newcalOptions);
 }
 
 function setupIFrame() {
     let iframe = window.frameElement;
 
     applyFlexStyles(iframe.parentElement, ['flex-direction', 'column', '1']);
-    applyFlexStyles(iframe, ['height'], '99%');
-    removeStyles(iframe, ['min-height', 'max-height']);
+    removeStyles(iframe, ['height'], ['min-height', 'max-height']);
     applyFlexStyles(iframe, ['flex-grow', 'flex-shrink', 'flex-basis'], ['1', '1', 'auto']);
-    iframe.style.paddingBottom = '42px';
+    iframe.style.paddingBottom = '20px';
 }
 
 function applyFlexStyles(element, properties, values) {
@@ -42,27 +33,6 @@ function removeStyles(element, properties) {
     });
 }
 
-function setupControlAddIn(enableDraggable) {
-    let controlAddIn = document.getElementById("controlAddIn");
-
-    let calendarContainer = createDiv();
-    calendarContainer.id = 'calendar-container';
-    calendarContainer.innerHTML = '';
-
-    let calendarElement = createDiv();
-    calendarElement.id = 'calendar';
-    calendarElement.innerHTML = '';
-
-    calendarContainer.appendChild(calendarElement);
-    controlAddIn.appendChild(calendarContainer);
-}
-
-function createDiv() {
-    let newDiv = document.createElement('div');
-    applyFlexStyles(newDiv, ['height', 'flex-grow', 'flex-shrink', 'flex-basis'], ['99%', '1', '1', 'auto']);
-    return newDiv;
-}
-
 function setupDraggable() {
     let externalEvents = document.getElementById("external-events");
 
@@ -76,14 +46,82 @@ function setupDraggable() {
     });
 }
 
-function setupCalendar() {
-    alert('hello');
-    var calendarEl = document.getElementById("calendar");
-    bccalendar = new calendarJs( calendarEl, {
-        manualEditingEnabled: true
-        // All your options can be set here
-      } );
-    //bccalendar.render();
+function setupCalendar(newOptions) {
+    console.log(JSON.stringify(newOptions));
+    var controlAddIn = document.getElementById("controlAddIn");
+    bccalendar = new calendarJs( controlAddIn, {
+        onEventAdded: function(event) {
+            syncEvent2BC(event);
+        },
+        onEventUpdated: function(event) {
+            syncEvent2BC(event);
+        },
+        onEventRemoved: function(event){
+            removeEventFromBC(event);
+        }
+    });
+    bccalendar.setOptions(newOptions);
+    bccalendar.setEvents( getEvents(), false );
+}
 
-    alert('ok');
+function applyOptions(newOptions) {
+    bccalendar.setOptions(newOptions);
+}
+
+function onEventUpdate(event)
+{
+    syncEvent2BC(event);
+}
+
+// get the event JsonArray from AL
+async function getEvents() {
+    let call = getALEventHandler("GetEvents", false);
+    let res = await call();
+    console.log(JSON.stringify(res));
+    if (res === null) {
+        res = [];
+    }
+    return res;
+}
+
+// sync the event details with BC.
+async function syncEvent2BC(event) {
+    let call = getALEventHandler("SyncEvent2BC", false);
+    let res = await call(event);
+    console.log(JSON.stringify(res));
+    if (res === null) {
+        res = [];
+    }
+    return res;
+}
+
+// remove the event details from BC.
+async function removeEventFromBC(event) {
+    let call = getALEventHandler("RemoveEventFromBC", false);
+    let res = await call(event);
+    console.log(JSON.stringify(res));
+    if (res === null) {
+        res = [];
+    }
+    return res;
+}
+
+
+// get return value from AL trigger or proc
+function getALEventHandler(eventName, skipIfBusy) {
+    return (...args) => new Promise(resolve => {
+        let res;
+
+        let eRes = `${eventName}Result`;
+        window[eRes] = alRes => {
+            res = alRes;
+            delete window[eRes];
+        };
+
+        Microsoft.Dynamics.NAV.InvokeExtensibilityMethod(
+            eventName,
+            args,
+            skipIfBusy,
+            () => resolve(res));
+    });
 }

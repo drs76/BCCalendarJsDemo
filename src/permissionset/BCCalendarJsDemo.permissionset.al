@@ -1,15 +1,12 @@
 permissionset 50200 BCCalendarJsDemo
 {
-    Caption = 'BCCalendarJS';
+    Caption = 'BCCalendarJsDemo';
     Assignable = true;
-    Permissions = codeunit PTEFullCalendarEventMgt = X,
-        codeunit PTECalendarJsHelper = X,
+    Permissions = codeunit PTECalendarJsHelper = X,
         codeunit PTECalendarJsJsonHelper = X,
-        page PTECalendarDemo = X,
-        page PTEFullCalendarEvent = X,
+        page PTECalendarJsDemo = X,
         tabledata PTECalendarJsSetup = RIMD,
         table PTECalendarJsSetup = X,
-        codeunit PTEFullCalendarSetupMgt = X,
         tabledata PTECalendarJsViewOption = RIMD,
         table PTECalendarJsViewOption = X,
         tabledata PTECalendarJsSearchOption = RIMD,
@@ -22,5 +19,8 @@ permissionset 50200 BCCalendarJsDemo
         page PTECalendarJsSetups = X,
         page PTECalendarJsTranslationLegend = X,
         page PTECalendarJSViewOption = X,
-        page PTESelectFromEnumValues = X;
+        page PTESelectFromEnumValues = X,
+        page PTECalendarJsTranslatons = X,
+        tabledata PTECalendarJsEvent = RIMD,
+        table PTECalendarJsEvent = X;
 }
