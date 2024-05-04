@@ -91,7 +91,7 @@ table 50204 PTECalendarJsEvent
         {
             Caption = 'RepeatEnds';
         }
-        field(22; Group; Text[100])
+        field(22; EventGroup; Text[100])
         {
             Caption = 'Group';
         }
@@ -119,7 +119,7 @@ table 50204 PTECalendarJsEvent
         {
             Caption = 'Locked';
         }
-        field(29; Type; Integer)
+        field(29; EventType; Integer)
         {
             Caption = 'Type';
         }
@@ -135,6 +135,26 @@ table 50204 PTECalendarJsEvent
         {
             Caption = 'AlertOffset';
         }
+        field(1000; KeyField1; Code[50])
+        {
+            Caption = 'Key Field 1';
+        }
+        field(1001; KeyField2; Code[50])
+        {
+            Caption = 'Key Field 2';
+        }
+        field(1002; KeyField3; Code[50])
+        {
+            Caption = 'Key Field 3';
+        }
+        field(1003; KeyField4; Code[50])
+        {
+            Caption = 'Key Field 4';
+        }
+        field(1004; KeyField5; Code[50])
+        {
+            Caption = 'Key Field 5';
+        }
     }
 
     keys
@@ -142,6 +162,12 @@ table 50204 PTECalendarJsEvent
         key(PK; EntryNo)
         {
             Clustered = true;
+        }
+        key(Key2; CalendarCode, Id)
+        {
+        }
+        key(Key3; TableNo, DTFrom, DTTo, KeyField1, KeyField2, KeyField3, KeyField4, KeyField5)
+        {
         }
     }
 
@@ -173,6 +199,15 @@ table 50204 PTECalendarJsEvent
             CalendarJSEvent.Init();
         RecRef.GetTable(CalendarJSEvent);
 
-        CalendarJsJsonHelper.JsonToRecord(RecRef, EventJson);
+        CalendarJsJsonHelper.JsonToRecord(RecRef, EventJO);
+    end;
+
+    internal procedure SetKeyData(KeyData: array[5] of Code[50])
+    begin
+        Rec.KeyField1 := KeyData[1];
+        Rec.KeyField2 := KeyData[2];
+        Rec.KeyField3 := KeyData[3];
+        Rec.KeyField4 := KeyData[4];
+        Rec.KeyField5 := KeyData[5];
     end;
 }

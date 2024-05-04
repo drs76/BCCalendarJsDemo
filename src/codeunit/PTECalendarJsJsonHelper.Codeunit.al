@@ -192,8 +192,10 @@ codeunit 50201 PTECalendarJsJsonHelper
 
     local procedure AddValueForJsonType(RecRef: RecordRef; Fields: Record Field; var ReturnValue: JsonObject)
     var
+        TempBlob: Codeunit "Temp Blob";
         JArray: JsonArray;
         JObject: JsonObject;
+        ReadStream: InStream;
         TextVal: Text;
         BooleanValue: Boolean;
         IntegerValue: Integer;
@@ -202,33 +204,44 @@ codeunit 50201 PTECalendarJsJsonHelper
         TimeValue: Time;
         DurationValue: Duration;
         DateTimeValue: DateTime;
+        EmptyObjTxt: Label '{}';
+        EmptyArrTxt: Label '[]';
     begin
-        if Fields.Class = Fields.Class::FlowField then
+        if (Fields.Class = Fields.Class::FlowField) or (Fields.Type = Fields.Type::BLOB) then
             RecRef.Field(Fields."No.").CalcField();
 
         case Fields.Type of
             Fields.Type::Boolean:
                 if Evaluate(BooleanValue, Format(RecRef.Field(Fields."No.").Value)) then
                     ReturnValue.Add(GetSafeFieldName(Fields), BooleanValue);
-            Fields.Type::Code, Fields.Type::Text:
+            Fields.Type::Code, Fields.Type::Text, Fields.Type::BLOB:
                 begin
-                    TextVal := Format(RecRef.Field(Fields."No.").Value);
-                    if StrLen(TextVal) = 0 then begin
-                        ReturnValue.Add(GetSafeFieldName(Fields), Format(RecRef.Field(Fields."No.").Value));
-                        exit;
-                    end;
+                    if Fields.Type = Fields.Type::BLOB then begin
+                        TempBlob.FromRecordRef(RecRef, Fields."No.");
+                        TempBlob.CreateInStream(ReadStream, TextEncoding::UTF8);
+                        ReadStream.ReadText(TextVal);
+                        if TextVal = '' then begin
+                            if IsObjectField(Fields) then
+                                TextVal := EmptyObjTxt;
+                            if IsArrayField(Fields) then
+                                TextVal := EmptyArrTxt;
+                        end;
+                    end else
+                        TextVal := Format(RecRef.Field(Fields."No.").Value);
 
-                    if (CopyStr(TextVal, 1, 1) = '[') and (CopyStr(TextVal, StrLen(TextVal), 1) = ']') then begin
-                        JArray.ReadFrom(TextVal);
-                        ReturnValue.Add(GetSafeFieldName(Fields), JArray);
-                        exit;
+                    if StrLen(TextVal) > 0 then begin
+                        if (CopyStr(TextVal, 1, 1) = '[') and (CopyStr(TextVal, StrLen(TextVal), 1) = ']') then begin
+                            JArray.ReadFrom(TextVal);
+                            ReturnValue.Add(GetSafeFieldName(Fields), JArray);
+                            exit;
+                        end;
+                        if (CopyStr(TextVal, 1, 1) = '{') and (CopyStr(TextVal, StrLen(TextVal), 1) = '}') then begin
+                            JObject.ReadFrom(TextVal);
+                            ReturnValue.Add(GetSafeFieldName(Fields), JObject);
+                            exit;
+                        end;
                     end;
-                    if (CopyStr(TextVal, 1, 1) = '{') and (CopyStr(TextVal, StrLen(TextVal), 1) = '}') then begin
-                        JObject.ReadFrom(TextVal);
-                        ReturnValue.Add(GetSafeFieldName(Fields), JObject);
-                        exit;
-                    end;
-                    ReturnValue.Add(GetSafeFieldName(Fields), Format(RecRef.Field(Fields."No.").Value));
+                    ReturnValue.Add(GetSafeFieldName(Fields), TextVal);
                 end;
             Fields.Type::Integer:
                 if Evaluate(IntegerValue, Format(RecRef.Field(Fields."No.").Value)) then
@@ -249,13 +262,15 @@ codeunit 50201 PTECalendarJsJsonHelper
                 if Evaluate(DateTimeValue, Format(RecRef.Field(Fields."No.").Value)) then
                     ReturnValue.Add(GetSafeFieldName(Fields), DateTimeValue);
             Fields.Type::Option:
-                ReturnValue.Add(GetSafeFieldName(Fields), Format(RecRef.Field(Fields."No.").Value));
+                ReturnValue.Add(GetSafeFieldName(Fields), RecRef.Field(Fields."No.").OptionMembers.IndexOf(Format(RecRef.Field(Fields."No.").Value)));
+            Fields.Type::GUID:
+                if not IsNullGuid(RecRef.Field(Fields."No.").Value) then
+                    ReturnValue.Add(GetSafeFieldName(Fields), DelChr(DelChr(Format(RecRef.Field(Fields."No.").Value), '=', '{'), '=', '}'));
         end;
     end;
 
     local procedure GetFields(TableNo: Integer; var Fields: Record Field; UseSystemFields: Boolean): Boolean
     var
-        CommpanyInfo: Record "Company Information";
         PinUpViewImageUrlsLbl: Label 'pinUpViewImageUrls';
         InitialDateTimeLbl: Label 'initialDateTime';
         DefaultLbl: Label 'Default';
@@ -263,12 +278,15 @@ codeunit 50201 PTECalendarJsJsonHelper
     begin
         Fields.SetRange(TableNo, TableNo);
         Fields.SetRange(ObsoleteState, Fields.ObsoleteState::No);
-        if not UseSystemFields then begin
-            Fields.SetFilter("No.", '<%1', CommpanyInfo.FieldNo(SystemId));
-            Fields.SetRange(IsPartOfPrimaryKey, false);
-            if TableNo = DataBase::PTECalendarJsSetup then
-                Fields.SetFilter("Field Caption", '<>%1&<>%2&<>%3&<>%4', PinUpViewImageUrlsLbl, InitialDateTimeLbl, DefaultLbl, DescriptionLbl);
-        end;
+        if not UseSystemFields then
+            if TableNo = Database::PTECalendarJsEvent then
+                Fields.SetRange("No.", 5, 999)
+            else begin
+                Fields.SetFilter("No.", '<%1', Fields.FieldNo(SystemId));
+                Fields.SetRange(IsPartOfPrimaryKey, false);
+                if TableNo = DataBase::PTECalendarJsSetup then
+                    Fields.SetFilter("Field Caption", '<>%1&<>%2&<>%3&<>%4', PinUpViewImageUrlsLbl, InitialDateTimeLbl, DefaultLbl, DescriptionLbl);
+            end;
         exit(Fields.FindSet());
     end;
 
@@ -280,27 +298,37 @@ codeunit 50201 PTECalendarJsJsonHelper
         ReturnValue := StrSubstNo(AppendLbl, LowerCase(Format(ReturnValue[1])), CopyStr(ReturnValue, 2, StrLen(ReturnValue)));
     end;
 
-    internal procedure JsonToRecord(var RecRef: RecordRef; JsonText: Text)
+    internal procedure JsonToRecord(var RecRef: RecordRef; CalEvent: JsonObject)
     var
-        EventJO: JsonObject;
+        PropMap: Dictionary of [Text, Integer];
         Prop: Text;
+        i: Integer;
     begin
-        EventJO.ReadFrom(JsonText);
-        foreach Prop in EventJO.Keys() do
-            ProcessFieldToRec(RecRef, Prop, EventJO);
+        for i := 1 to RecRef.FieldCount() do
+            if RecRef.FieldExist(i) then
+                PropMap.Add(RecRef.Field(i).Name.ToUpper(), i);
+
+        foreach Prop in CalEvent.Keys() do
+            if PropMap.Get(GetPropNameTranslation(Prop).ToUpper(), i) then
+                ProcessFieldToRec(RecRef, Prop, CalEvent, i);
     end;
 
-    local procedure ProcessFieldToRec(var RecRef: RecordRef; Prop: Text; EventJO: JsonObject)
+    local procedure ProcessFieldToRec(var RecRef: RecordRef; Prop: Text; CalEvent: JsonObject; FieldNo: Integer)
     var
         Fields: Record Field;
         TempBlob: Codeunit "Temp Blob";
         JToken: JsonToken;
         WriteStream: OutStream;
-        FieldFilterTxt: Label '@%1';
+        GuidVal: Guid;
+        IntVal: Integer;
     begin
-        Fields.SetRange(TableNo, RecRef.Number());
-        Fields.SetFilter(FieldName, FieldFilterTxt, Prop);
-        if not Fields.FindFirst() then
+        if not CalEvent.Get(Prop, JToken) then
+            exit;
+
+        if not CheckForNull(JToken) then
+            exit;
+
+        if not Fields.Get(RecRef.Number(), FieldNo) then
             exit;
 
         if Fields.Class = Fields.Class::FlowField then
@@ -309,15 +337,14 @@ codeunit 50201 PTECalendarJsJsonHelper
         if Fields.Class = Fields.Type::Blob then
             RecRef.Field(Fields."No.").CalcField();
 
-        EventJO.Get(Prop, JToken);
-
         case Fields.Type of
             Fields.Type::Text, Fields.Type::Code:
                 RecRef.Field(Fields."No.").Value := JToken.AsValue().AsText();
             Fields.Type::Decimal:
                 RecRef.Field(Fields."No.").Value := JToken.AsValue().AsDecimal();
             Fields.Type::Integer:
-                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsInteger();
+                if Evaluate(IntVal, JToken.AsValue().AsText()) then
+                    RecRef.Field(Fields."No.").Value := IntVal;
             Fields.Type::DateTime:
                 RecRef.Field(Fields."No.").Value := JToken.AsValue().AsDateTime();
             Fields.Type::Date:
@@ -326,6 +353,11 @@ codeunit 50201 PTECalendarJsJsonHelper
                 RecRef.Field(Fields."No.").Value := JToken.AsValue().AsTime();
             Fields.Type::Boolean:
                 RecRef.Field(Fields."No.").Value := JToken.AsValue().AsBoolean();
+            Fields.Type::GUID:
+                begin
+                    Evaluate(GuidVal, JToken.AsValue().AsText());
+                    RecRef.Field(Fields."No.").Value := GuidVal;
+                end;
             Fields.Type::Blob:
                 begin
                     TempBlob.CreateOutStream(WriteStream, TextEncoding::UTF8);
@@ -333,5 +365,79 @@ codeunit 50201 PTECalendarJsJsonHelper
                     TempBlob.ToRecordRef(RecRef, Fields."No.");
                 end;
         end;
+    end;
+
+    [TryFunction]
+    local procedure CheckForNull(JToken: JsonToken)
+    var
+        TestText: Text;
+    begin
+        TestText := JToken.AsValue().AsText();
+    end;
+
+    local procedure GetPropNameTranslation(Prop: Text) ReturnValue: Text
+    var
+        FromLbl: Label 'From';
+        From2Lbl: Label 'DTFrom';
+        ToLbl: Label 'To';
+        To2Lbl: Label 'DTTo';
+        TypeLbl: Label 'Type';
+        Type2Lbl: Label 'EventType';
+        GroupLbl: Label 'EventGroup';
+        Group2Lbl: Label 'Group';
+    begin
+        case Prop.ToUpper() of
+            UpperCase(FromLbl):
+                ReturnValue := From2Lbl;
+            UpperCase(ToLbl):
+                ReturnValue := To2Lbl;
+            UpperCase(TypeLbl):
+                ReturnValue := Type2Lbl;
+            UpperCase(GroupLbl):
+                ReturnValue := Group2Lbl;
+            else
+                ReturnValue := Prop;
+        end;
+    end;
+
+    local procedure IsObjectField(Fields: Record Field): Boolean
+    var
+        WorkingHoursStartLbl: Label 'workingHoursStart';
+        WorkingHoursEndLbl: Label 'workingHoursEnd';
+        RepeatEndsLbl: Label 'repeatEnds';
+        CustomTagsLbl: Label 'customTags';
+        PinUpViewImageUrlLbl: Label 'pinUpViewImageUrls';
+    begin
+        if Fields.TableNo = Database::PTECalendarJsSetup then begin
+            if Fields.FieldName.ToUpper() = UpperCase(WorkingHoursStartLbl) then
+                exit(true);
+            if Fields.FieldName.ToUpper() = UpperCase(WorkingHoursEndLbl) then
+                exit(true);
+        end;
+
+        if Fields.TableNo = Database::PTECalendarJsEvent then begin
+            if Fields.FieldName.ToUpper() = UpperCase(RepeatEndsLbl) then
+                exit(true);
+
+            if Fields.FieldName.ToUpper() = UpperCase(CustomTagsLbl) then
+                exit(true);
+
+            if Fields.FieldName.ToUpper() = UpperCase(PinUpViewImageUrlLbl) then
+                exit(true);
+        end;
+    end;
+
+    local procedure IsArrayField(Fields: Record Field): Boolean
+    var
+        SeriesIgnoreDatesLbl: Label 'seriesIgnoreDates';
+        HolidaysLbl: Label 'holidays';
+    begin
+        if Fields.TableNo = Database::PTECalendarJsSetup then
+            if Fields.FieldName.ToUpper() = UpperCase(HolidaysLbl) then
+                exit(true);
+
+        if Fields.TableNo = Database::PTECalendarJsEvent then
+            if Fields.FieldName.ToUpper() = UpperCase(SeriesIgnoreDatesLbl) then
+                exit(true);
     end;
 }

@@ -47,21 +47,29 @@ function setupDraggable() {
 }
 
 function setupCalendar(newOptions) {
-    console.log(JSON.stringify(newOptions));
     var controlAddIn = document.getElementById("controlAddIn");
     bccalendar = new calendarJs( controlAddIn, {
+        onOptionsUpdated: function(options) {
+            syncOptionsBC(options);
+            return true;
+        },
         onEventAdded: function(event) {
             syncEvent2BC(event);
+            return true;
         },
         onEventUpdated: function(event) {
             syncEvent2BC(event);
+            return true;
         },
         onEventRemoved: function(event){
             removeEventFromBC(event);
-        }
+            return true;
+        },
+        useLocalStorageForEvents: true
     });
     bccalendar.setOptions(newOptions);
-    bccalendar.setEvents( getEvents(), false );
+    getEvents();
+    bccalendar.turnOnFullScreen();
 }
 
 function applyOptions(newOptions) {
@@ -75,8 +83,18 @@ function onEventUpdate(event)
 
 // get the event JsonArray from AL
 async function getEvents() {
-    let call = getALEventHandler("GetEvents", false);
+    let call = getALEventHandler("OnFetchEvents", false);
     let res = await call();
+    if (res === null) {
+        res = [];
+    }
+    bccalendar.setEventsFromJson(JSON.stringify(res));
+}
+
+// sync the event details with BC.
+async function syncOptionsBC(event) {
+    let call = getALEventHandler("OnSyncOptionsBC", false);
+    let res = await call(event);
     console.log(JSON.stringify(res));
     if (res === null) {
         res = [];
@@ -86,7 +104,7 @@ async function getEvents() {
 
 // sync the event details with BC.
 async function syncEvent2BC(event) {
-    let call = getALEventHandler("SyncEvent2BC", false);
+    let call = getALEventHandler("OnSyncEvent2BC", false);
     let res = await call(event);
     console.log(JSON.stringify(res));
     if (res === null) {

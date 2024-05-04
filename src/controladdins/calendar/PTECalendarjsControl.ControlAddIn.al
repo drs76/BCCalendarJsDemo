@@ -16,16 +16,18 @@ controladdin PTECalendarjsControl
 
 
     event ControlReady();
-    event GetEvents();
-    event SyncEvent2BC(entry: JsonObject);
-    event RemoveEventFromBC(entry: JsonObject);
-
+    event OnFetchEvents();
+    event OnSyncOptionsBC(options: JsonObject);
+    event OnSyncEvent2BC(entry: JsonObject);
+    event OnRemoveEventFromBC(entry: JsonObject);
 
     procedure InitCalendar(options: JsonObject)
     procedure SetOptions(options: JsonObject)
     procedure SetViewOptions(viewOptions: JsonObject)
     procedure SetSearchOptions(searchOptions: JsonObject)
-    procedure GetEventsResult(events: JsonArray)
-    procedure SyncEvent2BCResult(result: JsonObject)
-    procedure RemoveEventFromBCResult(result: JsonObject)
+
+    procedure OnFetchEventsResult(events: JsonArray)
+    procedure OnSyncOptionsBCResult(result: JsonObject)
+    procedure OnSyncEvent2BCResult(result: JsonObject)
+    procedure OnRemoveEventFromBCResult(result: JsonObject)
 }
