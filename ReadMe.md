@@ -117,7 +117,7 @@ pageextension 50202 PTECustomerDemo2 extends "Customer Card"
 
 ![Alt text](/images/CalendarAddEventOptional.png?raw=true "Calendar Add Event Option")
 
-![Alt text](/images/CalendarAddEventColours.png?raw=true "Calendar Add Event Colours")
+![Alt text](/images/CalendarAddEventEventColours.png?raw=true "Calendar Add Event Colours")
 
 ### As widget
 
