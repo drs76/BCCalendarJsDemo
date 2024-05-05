@@ -9,7 +9,6 @@ page 50213 PTECustomerDemo
     ModifyAllowed = false;
     DeleteAllowed = false;
 
-
     layout
     {
         area(content)
