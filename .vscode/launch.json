@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "mYsandbox",
+      "type": "al",
+      "request": "launch",
+      "environmentType": "Sandbox",
+      "environmentName": "sandy",
+      "server": "https://businesscentral.dynamics.com/5a6e44a4-b60d-4cfd-b4ef-b5061297137e/",
+      "startupObjectId": 22,
+      "breakOnError": "All",
+      "breakOnRecordWrite": "None",
+      "launchBrowser": true,
+      "enableSqlInformationDebugger": true,
+      "enableLongRunningSqlStatements": true,
+      "longRunningSqlStatementsThreshold": 500,
+      "numberOfSqlStatements": 10
+    },
+    {
+      "name": "docker-core",
+      "request": "launch",
+      "type": "al",
+      "environmentType": "OnPrem",
+      "server": "http://docker-core:8232/",
+      "serverInstance": "BC",
+      "authentication": "UserPassword",
+      "port": 7290,
+      "breakOnError": "All",
+      "launchBrowser": true,
+      "enableLongRunningSqlStatements": true,
+      "enableSqlInformationDebugger": true,
+      "tenant": "default",
+      "usePublicURLFromServer": false,
+      "schemaUpdateMode": "ForceSync"
+    }
+  ]
+}
