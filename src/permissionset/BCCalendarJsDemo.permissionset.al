@@ -4,7 +4,7 @@ permissionset 50200 BCCalendarJsDemo
     Assignable = true;
     Permissions = codeunit PTECalendarJsHelper = X,
         codeunit PTECalendarJsJsonHelper = X,
-        page PTECalendarJsDemo = X,
+        page PTECalendarJsPart = X,
         tabledata PTECalendarJsSetup = RIMD,
         table PTECalendarJsSetup = X,
         tabledata PTECalendarJsViewOption = RIMD,

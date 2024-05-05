@@ -2,28 +2,28 @@ enum 50201 PTECalendarJSViews
 {
     Extensible = true;
 
-    value(0; "full-day")
+    value(0; fullDay)
     {
-        Caption = 'full-day';
+        Caption = 'fullDay';
     }
-    value(1; "full-week")
+    value(1; fullWeek)
     {
-        Caption = 'full-week';
+        Caption = 'fullWeek';
     }
-    value(2; "ful-month")
+    value(2; fullMonth)
     {
-        Caption = 'full-month';
+        Caption = 'fullMonth';
     }
-    value(3; "full-year")
+    value(3; fullYear)
     {
-        Caption = 'full-year';
+        Caption = 'fullYear';
     }
-    value(4; "timeline")
+    value(4; timeline)
     {
         Caption = 'timeline';
     }
-    value(5; "all-events")
+    value(5; allEvents)
     {
-        Caption = 'all-events';
+        Caption = 'allEvents';
     }
 }

@@ -171,16 +171,31 @@ codeunit 50201 PTECalendarJsJsonHelper
     var
         Fields: Record Field;
         RecRef: RecordRef;
-        WrongTypeErr: Label 'RecordToConvert must be type Recored.';
+        ExtraJO: JsonObject;
+        WrongTypeErr: Label 'RecordToConvert must be type Record.';
+        SideMenuLbl: Label 'sideMenu';
     begin
         if not RecordToConvert.IsRecord() then
             Error(WrongTypeErr);
 
         RecRef.GetTable(RecordToConvert);
-        if not GetFields(RecRef.Number(), Fields, UseSystemFields) then
-            exit;
+        if RecRef.Number() = Database::PTECalendarJsViewOption then
+            if not GetFieldsForView(RecRef.Number(), Fields, RecRef) then
+                exit;
+
+        if RecRef.Number() <> Database::PTECalendarJsViewOption then
+            if not GetFields(RecRef.Number(), Fields, UseSystemFields) then
+                exit;
 
         ProcessToJson(RecRef, Fields, ReturnValue);
+
+        if RecRef.Number() = Database::PTECalendarJsSetup then begin
+            if not GetFieldsForSideMenu(RecRef.Number(), Fields) then
+                exit;
+
+            ProcessToJson(RecRef, Fields, ExtraJO);
+            ReturnValue.Add(SideMenuLbl, ExtraJO);
+        end;
     end;
 
     local procedure ProcessToJson(RecRef: RecordRef; var Fields: Record Field; var ReturnValue: JsonObject)
@@ -230,16 +245,18 @@ codeunit 50201 PTECalendarJsJsonHelper
                         TextVal := Format(RecRef.Field(Fields."No.").Value);
 
                     if StrLen(TextVal) > 0 then begin
-                        if (CopyStr(TextVal, 1, 1) = '[') and (CopyStr(TextVal, StrLen(TextVal), 1) = ']') then begin
-                            JArray.ReadFrom(TextVal);
-                            ReturnValue.Add(GetSafeFieldName(Fields), JArray);
-                            exit;
-                        end;
-                        if (CopyStr(TextVal, 1, 1) = '{') and (CopyStr(TextVal, StrLen(TextVal), 1) = '}') then begin
-                            JObject.ReadFrom(TextVal);
-                            ReturnValue.Add(GetSafeFieldName(Fields), JObject);
-                            exit;
-                        end;
+                        if IsArrayField(Fields) then
+                            if (CopyStr(TextVal, 1, 1) = '[') and (CopyStr(TextVal, StrLen(TextVal), 1) = ']') then begin
+                                JArray.ReadFrom(TextVal);
+                                ReturnValue.Add(GetSafeFieldName(Fields), JArray);
+                                exit;
+                            end;
+                        if IsObjectField(Fields) then
+                            if (CopyStr(TextVal, 1, 1) = '{') and (CopyStr(TextVal, StrLen(TextVal), 1) = '}') then begin
+                                JObject.ReadFrom(TextVal);
+                                ReturnValue.Add(GetSafeFieldName(Fields), JObject);
+                                exit;
+                            end;
                     end;
                     ReturnValue.Add(GetSafeFieldName(Fields), TextVal);
                 end;
@@ -276,17 +293,53 @@ codeunit 50201 PTECalendarJsJsonHelper
         DefaultLbl: Label 'Default';
         DescriptionLbl: Label 'Description';
     begin
+        Fields.Reset();
         Fields.SetRange(TableNo, TableNo);
         Fields.SetRange(ObsoleteState, Fields.ObsoleteState::No);
         if not UseSystemFields then
-            if TableNo = Database::PTECalendarJsEvent then
-                Fields.SetRange("No.", 5, 999)
-            else begin
-                Fields.SetFilter("No.", '<%1', Fields.FieldNo(SystemId));
-                Fields.SetRange(IsPartOfPrimaryKey, false);
-                if TableNo = DataBase::PTECalendarJsSetup then
-                    Fields.SetFilter("Field Caption", '<>%1&<>%2&<>%3&<>%4', PinUpViewImageUrlsLbl, InitialDateTimeLbl, DefaultLbl, DescriptionLbl);
+            case TableNo of
+                Database::PTECalendarJsEvent:
+                    Fields.SetRange("No.", 5, 48);
+                else begin
+                    Fields.SetFilter("No.", '<%1', Fields.FieldNo(SystemId));
+                    Fields.SetRange(IsPartOfPrimaryKey, false);
+                    if TableNo = DataBase::PTECalendarJsSetup then
+                        Fields.SetFilter("Field Caption", '<>%1&<>%2&<>%3&<>%4', PinUpViewImageUrlsLbl, InitialDateTimeLbl, DefaultLbl, DescriptionLbl);
+                end;
             end;
+        exit(Fields.FindSet());
+    end;
+
+    local procedure GetFieldsForSideMenu(TableId: Integer; var Fields: Record Field): Boolean
+    begin
+        Fields.Reset();
+        Fields.SetRange(TableNo, TableId);
+        Fields.SetRange("No.", 49, 53);
+    end;
+
+    local procedure GetFieldsForView(TableId: Integer; var Fields: Record Field; RecRef: RecordRef): Boolean
+    var
+        CalendarJSView: Record PTECalendarJsViewOption;
+    begin
+        Fields.Reset();
+        Fields.SetRange(TableNo, TableId);
+        RecRef.SetTable(CalendarJSView);
+        case CalendarJSView.CalendarView of
+            PTECalendarJSViews::allEvents:
+                Fields.SetFilter("No.", '%1', 6);
+            PTECalendarJSViews::fullDay:
+                Fields.SetFilter("No.", '%1..%2', 3, 6);
+            PTECalendarJSViews::fullMonth:
+                Fields.SetFilter("No.", '%1..%2|%3|%4|%5', 9, 17, 7, 20, 6);
+            PTECalendarJSViews::fullWeek:
+                Fields.SetFilter("No.", '%1..%2|%3', 3, 6, 7);
+            PTECalendarJSViews::fullYear:
+                Fields.SetFilter("No.", '%1', 6);
+            PTECalendarJSViews::timeline:
+                Fields.SetFilter("No.", '%1|%2|%3', 21, 4, 6);
+            else
+                exit(false);
+        end;
         exit(Fields.FindSet());
     end;
 
@@ -370,9 +423,18 @@ codeunit 50201 PTECalendarJsJsonHelper
     [TryFunction]
     local procedure CheckForNull(JToken: JsonToken)
     var
+        Jarray: JsonArray;
+        Jobject: JsonObject;
         TestText: Text;
     begin
-        TestText := JToken.AsValue().AsText();
+        if JToken.IsArray() then
+            Jarray := JToken.AsArray();
+
+        if JToken.IsObject() then
+            Jobject := JToken.AsObject();
+
+        if JToken.IsValue() then
+            TestText := JToken.AsValue().AsText();
     end;
 
     local procedure GetPropNameTranslation(Prop: Text) ReturnValue: Text

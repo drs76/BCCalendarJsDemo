@@ -246,9 +246,9 @@ table 50200 PTECalendarJsSetup
             Caption = 'SideMenuShowWorkingDays';
             InitValue = true;
         }
-        field(53; SideMenuDhowWeekendDays; Boolean)
+        field(53; SideMenuShowWeekendDays; Boolean)
         {
-            Caption = 'SideMenuDhowWeekendDays';
+            Caption = 'SideMenuShowWeekendDays';
             InitValue = true;
         }
         field(100; Default; Boolean)

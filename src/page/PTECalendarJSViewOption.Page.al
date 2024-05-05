@@ -14,7 +14,7 @@ page 50205 PTECalendarJSViewOption
             group(FullDay)
             {
                 Caption = 'Options';
-                Visible = Rec.CalendarView = PTECalendarJsViews::"full-day";
+                Visible = Rec.CalendarView = PTECalendarJsViews::fullDay;
 
                 field("Calendar View"; Rec.CalendarView)
                 {
@@ -44,7 +44,7 @@ page 50205 PTECalendarJSViewOption
             }
             group(FullWeek)
             {
-                Visible = Rec.CalendarView = Rec.CalendarView::"full-week";
+                Visible = Rec.CalendarView = Rec.CalendarView::fullWeek;
 
                 field(ShowAllDayEventDetailsFullWeek; Rec.ShowAllDayEventDetails)
                 {
@@ -79,7 +79,7 @@ page 50205 PTECalendarJSViewOption
             }
             group(FullMonth)
             {
-                Visible = Rec.CalendarView = Rec.CalendarView::"ful-month";
+                Visible = Rec.CalendarView = Rec.CalendarView::fullMonth;
                 field(MaximumEventsPerDayDisplay; Rec.MaximumEventsPerDayDisplay)
                 {
                     ApplicationArea = All;
@@ -148,7 +148,7 @@ page 50205 PTECalendarJSViewOption
             }
             group(FullYear)
             {
-                Visible = Rec.CalendarView = Rec.CalendarView::"full-year";
+                Visible = Rec.CalendarView = Rec.CalendarView::fullYear;
 
                 field(ShowExtraTitleBarButtonsFullWeekFullYear; Rec.ShowExtraTitleBarButtons)
                 {
@@ -178,7 +178,7 @@ page 50205 PTECalendarJSViewOption
             }
             group(AllEvents)
             {
-                Visible = Rec.CalendarView = Rec.CalendarView::"all-events";
+                Visible = Rec.CalendarView = Rec.CalendarView::allEvents;
 
                 field(ShowExtraTitleBarButtonsFullWeekAllEvents; Rec.ShowExtraTitleBarButtons)
                 {

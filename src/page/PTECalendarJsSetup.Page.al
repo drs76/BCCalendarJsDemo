@@ -356,7 +356,7 @@ page 50204 PTECalendarJsSetup
                     ApplicationArea = All;
                     ToolTip = 'States if the “Working Days” section on the Side Menu is visible (defaults to true).';
                 }
-                field(SideMenuDhowWeekendDays; Rec.SideMenuDhowWeekendDays)
+                field(SideMenuDhowWeekendDays; Rec.SideMenuShowWeekendDays)
                 {
                     ApplicationArea = All;
                     ToolTip = 'States if the “Weekend Days” section on the Side Menu is visible (defaults to true).';

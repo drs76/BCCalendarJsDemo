@@ -4,6 +4,7 @@ codeunit 50203 PTECalendarJsHelper
     var
         CalendarJsSetup: Record PTECalendarJsSetup;
         CalendarJsJsonHelper: Codeunit PTECalendarJsJsonHelper;
+        ViewsLbl: Label 'views';
     begin
         CalendarJsSetup.SetRange(Default, true);
         if not CalendarJsSetup.FindFirst() then
@@ -11,6 +12,18 @@ codeunit 50203 PTECalendarJsHelper
 
         CurrCalendar := CalendarJsSetup.CalendarCode;
         ReturnValue := CalendarJsJsonHelper.RecordToJson(CalendarJsSetup, false);
+        ReturnValue.Add(ViewsLbl, GetCalendarViewSettings(CalendarJsSetup.CalendarCode));
+    end;
+
+    internal procedure GetCalendarSetup(var CurrCalendar: Code[20])
+    var
+        CalendarJsSetup: Record PTECalendarJsSetup;
+    begin
+        CalendarJsSetup.SetRange(Default, true);
+        if not CalendarJsSetup.FindFirst() then
+            exit;
+
+        CurrCalendar := CalendarJsSetup.CalendarCode;
     end;
 
     internal procedure GetCalendarSearchSettings(CalCode: Code[20]) ReturnValue: JsonObject
@@ -24,24 +37,27 @@ codeunit 50203 PTECalendarJsHelper
         ReturnValue := CalendarJsJsonHelper.RecordToJson(CalendarJsSearchOption, false);
     end;
 
-    internal procedure GetCalendarViewSettings(CalCode: Code[20]; ViewType: Enum PTECalendarJSViews) ReturnValue: JsonObject
+    internal procedure GetCalendarViewSettings(CalCode: Code[20]) ReturnValue: JsonObject
     var
         CalendarJsViewOption: Record PTECalendarJsViewOption;
         CalendarJsJsonHelper: Codeunit PTECalendarJsJsonHelper;
     begin
-        if not CalendarJsViewOption.Get(CalCode, ViewType) then
+        CalendarJsViewOption.SetRange(CalendarCode, CalCode);
+        if not CalendarJsViewOption.FindSet() then
             exit;
 
-        ReturnValue := CalendarJsJsonHelper.RecordToJson(CalendarJsViewOption, false);
+        repeat
+            ReturnValue.Add(Format(CalendarJsViewOption.CalendarView), CalendarJsJsonHelper.RecordToJson(CalendarJsViewOption, false));
+        until CalendarJsViewOption.Next() = 0;
     end;
 
-    internal procedure LaunchCalendar(RecordForCalendar: Variant)
+    internal procedure LaunchCalendar(RecordForCalendar: Variant; WidgetMode: Boolean)
     var
-        CalendarJsDemo: Page PTECalendarJsDemo;
+        CalendarJsDemo: Page PTECalendarJsPart;
         RecRef: RecordRef;
     begin
         RecRef.GetTable(RecordForCalendar);
-        CalendarJsDemo.InitCalendarSource(RecRef.Number(), RecRef.Field(RecRef.SystemIdNo).Value);
+        CalendarJsDemo.InitCalendarSource(RecRef.Number(), RecRef.Field(RecRef.SystemIdNo).Value, WidgetMode);
     end;
 
     internal procedure BuildEvents(TableNo: Integer; KeyData: array[5] of Code[20]) ReturnValue: JsonArray
