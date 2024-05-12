@@ -371,6 +371,9 @@ codeunit 50201 PTECalendarJsJsonHelper
         Fields: Record Field;
         TempBlob: Codeunit "Temp Blob";
         JToken: JsonToken;
+        JObject: JsonObject;
+        JArray: JsonArray;
+        JText: Text;
         WriteStream: OutStream;
         GuidVal: Guid;
         IntVal: Integer;
@@ -392,7 +395,21 @@ codeunit 50201 PTECalendarJsJsonHelper
 
         case Fields.Type of
             Fields.Type::Text, Fields.Type::Code:
-                RecRef.Field(Fields."No.").Value := JToken.AsValue().AsText();
+                begin
+                    if JToken.IsArray() then begin
+                        JArray := JToken.AsArray();
+                        JArray.WriteTo(JText);
+                        RecRef.Field(Fields."No.").Value := CopyStr(JText, 1, RecRef.Field(Fields."No.").Length());
+                        exit;
+                    end;
+                    if JToken.IsObject() then begin
+                        JObject := JToken.AsObject();
+                        JObject.WriteTo(JText);
+                        RecRef.Field(Fields."No.").Value := CopyStr(JText, 1, RecRef.Field(Fields."No.").Length());
+                        exit;
+                    end;
+                    RecRef.Field(Fields."No.").Value := JToken.AsValue().AsText();
+                end;
             Fields.Type::Decimal:
                 RecRef.Field(Fields."No.").Value := JToken.AsValue().AsDecimal();
             Fields.Type::Integer:
@@ -414,6 +431,18 @@ codeunit 50201 PTECalendarJsJsonHelper
             Fields.Type::Blob:
                 begin
                     TempBlob.CreateOutStream(WriteStream, TextEncoding::UTF8);
+                    if JToken.IsArray() then begin
+                        JArray := JToken.AsArray();
+                        JArray.WriteTo(WriteStream);
+                        TempBlob.ToRecordRef(RecRef, Fields."No.");
+                        exit;
+                    end;
+                    if JToken.IsObject() then begin
+                        JObject := JToken.AsObject();
+                        JObject.WriteTo(WriteStream);
+                        TempBlob.ToRecordRef(RecRef, Fields."No.");
+                        exit;
+                    end;
                     WriteStream.WriteText(JToken.AsValue().AsText());
                     TempBlob.ToRecordRef(RecRef, Fields."No.");
                 end;
@@ -427,11 +456,15 @@ codeunit 50201 PTECalendarJsJsonHelper
         Jobject: JsonObject;
         TestText: Text;
     begin
-        if JToken.IsArray() then
+        if JToken.IsArray() then begin
             Jarray := JToken.AsArray();
+            exit;
+        end;
 
-        if JToken.IsObject() then
+        if JToken.IsObject() then begin
             Jobject := JToken.AsObject();
+            exit;
+        end;
 
         if JToken.IsValue() then
             TestText := JToken.AsValue().AsText();
