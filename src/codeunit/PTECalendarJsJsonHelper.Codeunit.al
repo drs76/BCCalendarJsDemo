@@ -180,14 +180,12 @@ codeunit 50201 PTECalendarJsJsonHelper
 
         RecRef.GetTable(RecordToConvert);
         if RecRef.Number() = Database::PTECalendarJsViewOption then
-            if not GetFieldsForView(RecRef.Number(), Fields, RecRef) then
-                exit;
+            if GetFieldsForView(RecRef.Number(), Fields, RecRef) then
+                ProcessToJson(RecRef, Fields, ReturnValue);
 
         if RecRef.Number() <> Database::PTECalendarJsViewOption then
-            if not GetFields(RecRef.Number(), Fields, UseSystemFields) then
-                exit;
-
-        ProcessToJson(RecRef, Fields, ReturnValue);
+            if GetFields(RecRef.Number(), Fields, UseSystemFields) then
+                ProcessToJson(RecRef, Fields, ReturnValue);
 
         if RecRef.Number() = Database::PTECalendarJsSetup then begin
             if not GetFieldsForSideMenu(RecRef.Number(), Fields) then

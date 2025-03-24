@@ -2,6 +2,8 @@ table 50200 PTECalendarJsSetup
 {
     Caption = 'PTECalendarJsSetup';
     DataClassification = CustomerContent;
+    DrillDownPageId = PTECalendarJsSetups;
+    LookupPageId = PTECalendarJsSetups;
 
     fields
     {

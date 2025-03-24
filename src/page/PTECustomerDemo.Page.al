@@ -1,7 +1,8 @@
 page 50213 PTECustomerDemo
 {
     ApplicationArea = All;
-    Caption = 'Customer Demo';
+    Caption = 'CalendarJs Customer Demo';
+    AdditionalSearchTerms = 'Calendar,Customer';
     PageType = Card;
     SourceTable = Customer;
     UsageCategory = Administration;

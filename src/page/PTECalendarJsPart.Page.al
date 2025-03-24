@@ -55,12 +55,20 @@ page 50203 PTECalendarJsPart
                 end;
 
                 // ASYNC - Fires when an existing entry on the Calendar is updated.
-                trigger OnSyncEvent2BC(entry: JsonObject)
+                trigger OnAddEvent2BC(entry: JsonObject)
                 var
                     JResult: JsonObject;
                 begin
                     CalendarPageMgt.HandleCalendarUpdate(entry, CalendarUpdate::EventUpdate);
-                    CurrPage.PTECalendar.OnSyncEvent2BCResult(JResult)
+                    CurrPage.PTECalendar.OnAddEvent2BCResult(JResult)
+                end;
+
+                trigger OnModEvent2BC(entry: JsonObject)
+                var
+                    JResult: JsonObject;
+                begin
+                    CalendarPageMgt.HandleCalendarUpdate(entry, CalendarUpdate::EventUpdate);
+                    CurrPage.PTECalendar.OnModEvent2BCResult(JResult);
                 end;
 
                 // ASYNC - Fires when an existing entry on the Calendar is removed.

@@ -2,7 +2,7 @@
   "id": "de18e96f-d26a-43e1-9a11-c042dfc875c2",
   "name": "BCCalendarJsDemo",
   "publisher": "Dave Sinclair (drs76)",
-  "version": "23.2.0.0",
+  "version": "26.0.0.0",
   "brief": "",
   "description": "BC CalendarJs.js Demo",
   "privacyStatement": "",
@@ -12,14 +12,14 @@
   "logo": "",
   "dependencies": [],
   "screenshots": [],
-  "platform": "23.0.0.0",
-  "application": "23.0.0.0",
+  "platform": "26.0.0.0",
+  "application": "26.0.0.0",
   "idRanges": [
     {
       "from": 50200,
       "to": 50215
     }
   ],
-  "resourceExposurePolicy": { "allowDebugging": true },
-  "runtime": "11.0"
+  "resourceExposurePolicy": { "allowDebugging": true,"allowDownloadingSource": true,"includeSourceInSymbolFile": true },
+  "runtime": "15.0"
 }

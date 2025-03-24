@@ -3,7 +3,7 @@ page 50204 PTECalendarJsSetup
     ApplicationArea = All;
     Caption = 'CalendarJs Setup';
     PageType = Card;
-    UsageCategory = Administration;
+    UsageCategory = None;
     SourceTable = PTECalendarJsSetup;
 
     layout

@@ -22,5 +22,9 @@ permissionset 50200 BCCalendarJsDemo
         page PTESelectFromEnumValues = X,
         page PTECalendarJsTranslatons = X,
         tabledata PTECalendarJsEvent = RIMD,
-        table PTECalendarJsEvent = X;
+        table PTECalendarJsEvent = X,
+        codeunit PTECalendarJsEventSubs = X,
+        codeunit PTECalendarPageMgt = X,
+        page PTECalendarJsEvents = X,
+        page PTECustomerDemo = X;
 }

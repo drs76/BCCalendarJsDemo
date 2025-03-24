@@ -2,6 +2,8 @@ table 50202 PTECalendarJsSearchOption
 {
     Caption = 'CalendarJs Search Option';
     DataClassification = CustomerContent;
+    DrillDownPageId = PTECalendarJsSearchOptions;
+    LookupPageId = PTECalendarJsSearchOptions;
 
     fields
     {

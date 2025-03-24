@@ -2,6 +2,8 @@ table 50204 PTECalendarJsEvent
 {
     Caption = 'CalendarJs Event';
     DataClassification = CustomerContent;
+    DrillDownPageId = PTECalendarJsEvents;
+    LookupPageId = PTECalendarJsEvents;
 
     fields
     {
