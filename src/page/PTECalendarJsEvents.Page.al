@@ -2,6 +2,7 @@ page 50212 PTECalendarJsEvents
 {
     ApplicationArea = All;
     Caption = 'CalendarJs Events';
+    AdditionalSearchTerms = 'CalendarJs,Events,Event,Schedule';
     PageType = List;
     SourceTable = PTECalendarJsEvent;
     UsageCategory = Administration;
@@ -31,9 +32,11 @@ page 50212 PTECalendarJsEvents
                 {
                     ApplicationArea = All;
                 }
-                field(BCRecordSystemId; Rec.BCRecordSystemId)
+                field(BCRecordSystemId; Format(Rec.BCRecordSystemId))
                 {
                     ApplicationArea = All;
+                    Caption = 'BC RecordId';
+                    ToolTip = 'Specifies the value of the BC Record Id field.';
                 }
                 field(Description; DescriptionText)
                 {

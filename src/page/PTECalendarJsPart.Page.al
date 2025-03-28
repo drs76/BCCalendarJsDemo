@@ -1,10 +1,14 @@
 page 50203 PTECalendarJsPart
 {
-    Caption = 'CalendarJs Demo';
+    Caption = 'Calendar';
     AdditionalSearchTerms = 'calendar';
     PageType = CardPart;
     UsageCategory = None;
     ApplicationArea = All;
+    InsertAllowed = false;
+    DeleteAllowed = false;
+    ModifyAllowed = false;
+    ShowFilter = false;
 
     layout
     {
@@ -45,7 +49,7 @@ page 50203 PTECalendarJsPart
                     CurrPage.PTECalendar.OnSyncOptionsBCResult(JResult);
                 end;
 
-                // ASYNC - Fires when the calendar options are updated.
+                // ASYNC - Fires when the calendar search options are updated.
                 trigger OnSyncSearchOptionsBC(options: JsonObject)
                 var
                     JResult: JsonObject;
@@ -54,21 +58,21 @@ page 50203 PTECalendarJsPart
                     CurrPage.PTECalendar.OnSyncSearchOptionsBCResult(JResult);
                 end;
 
-                // ASYNC - Fires when an existing entry on the Calendar is updated.
-                trigger OnSyncEvent2BC(entry: JsonObject)
+                // ASYNC - Fires when an entry on the Calendar is updated.
+                trigger OnModEvent2BC(entry: JsonObject)
                 var
                     JResult: JsonObject;
                 begin
-                    CalendarPageMgt.HandleCalendarUpdate(entry, CalendarUpdate::EventUpdate);
-                    CurrPage.PTECalendar.OnSyncEvent2BCResult(JResult)
+                    JResult := CalendarPageMgt.HandleCalendarUpdate(entry, CalendarUpdate::EventUpdate);
+                    CurrPage.PTECalendar.OnModEvent2BCResult(JResult);
                 end;
 
-                // ASYNC - Fires when an existing entry on the Calendar is removed.
+                // ASYNC - Fires when an entry on the Calendar is removed.
                 trigger OnRemoveEventFromBC(entry: JsonObject)
                 var
                     JResult: JsonObject;
                 begin
-                    CalendarPageMgt.HandleCalendarUpdate(entry, CalendarUpdate::EventRemove);
+                    JResult := CalendarPageMgt.HandleCalendarUpdate(entry, CalendarUpdate::EventRemove);
                     CurrPage.PTECalendar.OnRemoveEventFromBCResult(JResult);
                 end;
             }
@@ -115,11 +119,14 @@ page 50203 PTECalendarJsPart
     local procedure SetupCalendar()
     var
         CalendarJsHelper: Codeunit PTECalendarJsHelper;
+        Options: JsonObject;
     begin
-        CurrPage.PTECalendar.InitCalendar(CalendarJsHelper.GetCalendarSettings(CurrCalCode), IsWidget); //setup & show calendar with initial view
-        CurrPage.PTECalendar.SetSearchOptions(CalendarJsHelper.GetCalendarSearchSettings(CurrCalCode));
+        Options := CalendarJsHelper.GetCalendarSettings(CurrCalCode); //setup & show calendar with initial view
+        if Options.Contains('searchOptions') then
+            Options.Remove('searchOptions');
 
-        CalendarJSSetup.Get(CurrCalCode);
+        Options.Add('searchOptions', CalendarJsHelper.GetCalendarSearchSettings(CurrCalCode));
+        CurrPage.PTECalendar.InitCalendar(Options, IsWidget); //setup & show calendar with initial view
     end;
 
 }

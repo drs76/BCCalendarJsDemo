@@ -5,5 +5,10 @@
   "CRS.OnSaveAlFileAction": "Reorganize",
   "al.enableCodeAnalysis": true,
   "al.enableCodeActions": true,
-  "al.codeAnalyzers": ["${CodeCop}", "${UICop}", "${PerTenantExtensionCop}"]
+  "al.codeAnalyzers": [
+    "${CodeCop}",
+    "${UICop}",
+    "${PerTenantExtensionCop}"
+  ],
+  "al.showHomeAtStartup": "Always"
 }

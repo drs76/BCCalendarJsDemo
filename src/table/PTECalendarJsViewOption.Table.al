@@ -11,7 +11,7 @@ table 50201 PTECalendarJsViewOption
         }
         field(2; CalendarView; Enum PTECalendarJSViews)
         {
-            Caption = 'Calendar View';
+            Caption = 'views';
             NotBlank = true;
         }
         field(3; ShowAllDayEventDetails; Boolean)
