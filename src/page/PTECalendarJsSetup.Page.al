@@ -3,7 +3,7 @@ page 50204 PTECalendarJsSetup
     ApplicationArea = All;
     Caption = 'CalendarJs Setup';
     PageType = Card;
-    UsageCategory = Administration;
+    UsageCategory = None;
     SourceTable = PTECalendarJsSetup;
 
     layout
@@ -274,7 +274,7 @@ page 50204 PTECalendarJsSetup
                         ApplicationArea = All;
                         ToolTip = 'States the default background color that should be used for events (defaults to “#484848”).';
                     }
-                    usercontrol(DefaultEventBackGroundColorPicker; PTEColorPicker)
+                    usercontrol(DefaultEventBackGroundColorPicker; PTEColorPickerControl)
                     {
                         ApplicationArea = All;
                         trigger ControlReady()
@@ -287,7 +287,7 @@ page 50204 PTECalendarJsSetup
                         ApplicationArea = All;
                         ToolTip = 'States the default text color that should be used for events (defaults to “#F5F5F5”).';
                     }
-                    usercontrol(DefaultEventTextColorPicker; PTEColorPicker)
+                    usercontrol(DefaultEventTextColorPicker; PTEColorPickerControl)
                     {
                         ApplicationArea = All;
                         trigger ControlReady()
@@ -300,7 +300,7 @@ page 50204 PTECalendarJsSetup
                         ApplicationArea = All;
                         ToolTip = 'States the default border color that should be used for events (defaults to “#282828”).';
                     }
-                    usercontrol(DefaultEventBorderColorPicker; PTEColorPicker)
+                    usercontrol(DefaultEventBorderColorPicker; PTEColorPickerControl)
                     {
                         ApplicationArea = All;
                         trigger ControlReady()

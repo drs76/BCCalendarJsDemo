@@ -1,0 +1,6 @@
+#controlAddIn {
+    width: 99%;
+    height: 99%;
+    display: flexbox;
+    flex-direction: column;
+}

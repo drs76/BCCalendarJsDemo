@@ -32,35 +32,30 @@ codeunit 50208 PTECalendarPageMgt
     var
         JToken: JsonToken;
         id: Guid;
-        UpdatedOK: Boolean;
+        GotId: Boolean;
         ResultLbl: Label 'success';
     begin
-        case UpdateType of
-            UpdateType::EventUpdate, UpdateType::EventRemove:
-                begin
-                    UpdatedOK := CalObject.Get(IdLbl, JToken);
-                    if UpdatedOK then
-                        UpdatedOK := Evaluate(id, JToken.AsValue().AsText());
-
-                    if UpdatedOK then
-                        if UpdateType = UpdateType::EventUpdate then
-                            SyncEvent(id, CalObject)
-                        else
-                            RemoveEvent(id);
-                    //send the update status back to calendar;
-                    ReturnValue.Add(ResultLbl, UpdatedOK);
-                end;
-            UpdateType::OptionsUpdate:
-                begin
-                    SyncOptions(CalObject);
-                    ReturnValue.Add(ResultLbl, UpdatedOK);
-                end;
-            UpdateType::SearchOptionsUpdate:
-                begin
-                    SyncOptions(CalObject);
-                    ReturnValue.Add(ResultLbl, UpdatedOK);
-                end;
+        if UpdateType in [UpdateType::EventUpdate, UpdateType::EventRemove] then begin
+            GotId := CalObject.Get(IdLbl, JToken);
+            if GotId then
+                GotId := Evaluate(id, JToken.AsValue().AsText());
+            if not GotId then
+                exit;
         end;
+        case UpdateType of
+            UpdateType::EventUpdate:
+                if GotId then begin
+                    ReturnValue := SyncEvent(id, CalObject, CalendarJSSetup.CalendarCode); // return the event
+                    exit;
+                end;
+            UpdateType::EventRemove:
+                RemoveEvent(id);
+            UpdateType::OptionsUpdate:
+                SyncOptions(CalObject);
+            UpdateType::SearchOptionsUpdate:
+                SyncOptions(CalObject);
+        end;
+        ReturnValue.Add(ResultLbl, GotId);
     end;
 
     internal procedure SyncOptions(Options: JsonObject)
@@ -87,7 +82,7 @@ codeunit 50208 PTECalendarPageMgt
         CalendarSearchOptions.Modify(true);
     end;
 
-    internal procedure SyncEvent(Id: Guid; CalEvent: JsonObject)
+    internal procedure SyncEvent(Id: Guid; CalEvent: JsonObject; CalendarCode: Code[20]) ReturnValue: JsonObject
     var
         CalendarJsEvent: Record PTECalendarJsEvent;
         CalendarJsHelper: Codeunit PTECalendarJsJsonHelper;
@@ -101,17 +96,18 @@ codeunit 50208 PTECalendarPageMgt
         if NewEvent then begin
             CalendarJsEvent.Init();
             CalendarJsEvent.SetKeyData(KeyData);
-            CalendarJsEvent.BCRecordSystemId := SourceRef.Field(SourceRef.SystemIdNo).Value;
+            CalendarJsEvent.BCRecordSystemId := SourceRef.RecordId();
             CalendarJsEvent.TableNo := SourceRef.Number();
+            CalendarJsEvent.CalendarCode := CalendarCode;
+            CalendarJsEvent.Insert(true);
         end;
 
         RecRef.GetTable(CalendarJsEvent);
         CalendarJsHelper.JsonToRecord(RecRef, CalEvent);
         RecRef.SetTable(CalendarJsEvent);
-        if NewEvent then
-            CalendarJsEvent.Insert(true)
-        else
-            CalendarJsEvent.Modify(true);
+        CalendarJsEvent.Modify(true);
+
+        ReturnValue := CalendarJsHelper.RecordToJson(CalendarJsEvent);
     end;
 
     internal procedure RemoveEvent(Id: Guid)

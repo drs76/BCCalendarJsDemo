@@ -2,6 +2,8 @@ table 50204 PTECalendarJsEvent
 {
     Caption = 'CalendarJs Event';
     DataClassification = CustomerContent;
+    DrillDownPageId = PTECalendarJsEvents;
+    LookupPageId = PTECalendarJsEvents;
 
     fields
     {
@@ -19,9 +21,9 @@ table 50204 PTECalendarJsEvent
         {
             Caption = 'Table No.';
         }
-        field(4; BCRecordSystemId; Guid)
+        field(4; BCRecordSystemId; RecordId)
         {
-            Caption = 'BC Record SystemId';
+            Caption = 'BC Record RecordId';
         }
         field(5; Id; Guid)
         {
@@ -171,6 +173,14 @@ table 50204 PTECalendarJsEvent
         }
     }
 
+    trigger OnInsert()
+    begin
+        if IsNullGuid(Rec.Id) then
+            Rec.Id := Rec.SystemId;
+
+        SetDefaultColors();
+    end;
+
     var
         CalendarJsJsonHelper: Codeunit PTECalendarJsJsonHelper;
 
@@ -209,5 +219,18 @@ table 50204 PTECalendarJsEvent
         Rec.KeyField3 := KeyData[3];
         Rec.KeyField4 := KeyData[4];
         Rec.KeyField5 := KeyData[5];
+    end;
+
+    local procedure SetDefaultColors()
+    var
+        CalendarSetup: Record PTECalendarJsSetup;
+    begin
+        CalendarSetup.Get(Rec.CalendarCode);
+        if Rec.Color = '' then
+            Rec.Color := CalendarSetup.DefaultEventBackgroundColor.ToLower();
+        if Rec.ColorText = '' then
+            Rec.ColorText := CalendarSetup.DefaultEventTextColor.ToLower();
+        if Rec.ColorBorder = '' then
+            Rec.ColorBorder := CalendarSetup.DefaultEventBorderColor.ToLower();
     end;
 }

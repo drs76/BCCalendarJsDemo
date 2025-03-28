@@ -18,9 +18,11 @@ Events are stored within PTECalendarEvent table in Business Central.
 
 There are 5 slots for KeyData to use for filtering, record systemId and table no.
 
-Calendar can be used as a page part, or a factboc (widget)
+Calendar can be used as a page part, or a factbox (widget)
 
 Add the PTECalendarJSPart to a page and add the following code to the OnAfterGetCurrRecord
+
+    CurrPage.CalendarJsPart.Page.InitCalendarSource(<TableID>, <Record SystemId>, <IsPagePart>);
 
 PagePart example:
 

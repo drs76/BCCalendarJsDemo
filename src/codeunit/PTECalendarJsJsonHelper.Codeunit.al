@@ -180,14 +180,12 @@ codeunit 50201 PTECalendarJsJsonHelper
 
         RecRef.GetTable(RecordToConvert);
         if RecRef.Number() = Database::PTECalendarJsViewOption then
-            if not GetFieldsForView(RecRef.Number(), Fields, RecRef) then
-                exit;
+            if GetFieldsForView(RecRef.Number(), Fields, RecRef) then
+                ProcessToJson(RecRef, Fields, ReturnValue);
 
         if RecRef.Number() <> Database::PTECalendarJsViewOption then
-            if not GetFields(RecRef.Number(), Fields, UseSystemFields) then
-                exit;
-
-        ProcessToJson(RecRef, Fields, ReturnValue);
+            if GetFields(RecRef.Number(), Fields, UseSystemFields) then
+                ProcessToJson(RecRef, Fields, ReturnValue);
 
         if RecRef.Number() = Database::PTECalendarJsSetup then begin
             if not GetFieldsForSideMenu(RecRef.Number(), Fields) then
@@ -208,8 +206,7 @@ codeunit 50201 PTECalendarJsJsonHelper
     local procedure AddValueForJsonType(RecRef: RecordRef; Fields: Record Field; var ReturnValue: JsonObject)
     var
         TempBlob: Codeunit "Temp Blob";
-        JArray: JsonArray;
-        JObject: JsonObject;
+        JToken: JsonToken;
         ReadStream: InStream;
         TextVal: Text;
         BooleanValue: Boolean;
@@ -244,21 +241,17 @@ codeunit 50201 PTECalendarJsJsonHelper
                     end else
                         TextVal := Format(RecRef.Field(Fields."No.").Value);
 
-                    if StrLen(TextVal) > 0 then begin
-                        if IsArrayField(Fields) then
-                            if (CopyStr(TextVal, 1, 1) = '[') and (CopyStr(TextVal, StrLen(TextVal), 1) = ']') then begin
-                                JArray.ReadFrom(TextVal);
-                                ReturnValue.Add(GetSafeFieldName(Fields), JArray);
-                                exit;
-                            end;
-                        if IsObjectField(Fields) then
-                            if (CopyStr(TextVal, 1, 1) = '{') and (CopyStr(TextVal, StrLen(TextVal), 1) = '}') then begin
-                                JObject.ReadFrom(TextVal);
-                                ReturnValue.Add(GetSafeFieldName(Fields), JObject);
-                                exit;
-                            end;
-                    end;
-                    ReturnValue.Add(GetSafeFieldName(Fields), TextVal);
+                    if TryText2Token(JToken, TextVal) then
+                        case true of
+                            JToken.IsArray():
+                                ReturnValue.Add(GetSafeFieldName(Fields), JToken.AsArray());
+                            JToken.IsObject():
+                                ReturnValue.Add(GetSafeFieldName(Fields), JToken.AsObject());
+                            JToken.IsValue():
+                                ReturnValue.Add(GetSafeFieldName(Fields), JToken.AsValue().AsText());
+                        end
+                    else
+                        ReturnValue.Add(GetSafeFieldName(Fields), TextVal);
                 end;
             Fields.Type::Integer:
                 if Evaluate(IntegerValue, Format(RecRef.Field(Fields."No.").Value)) then
@@ -284,6 +277,12 @@ codeunit 50201 PTECalendarJsJsonHelper
                 if not IsNullGuid(RecRef.Field(Fields."No.").Value) then
                     ReturnValue.Add(GetSafeFieldName(Fields), DelChr(DelChr(Format(RecRef.Field(Fields."No.").Value), '=', '{'), '=', '}'));
         end;
+    end;
+
+    [TryFunction]
+    local procedure TryText2Token(var JToken: JsonToken; TextVal: Text)
+    begin
+        JToken.ReadFrom(TextVal);
     end;
 
     local procedure GetFields(TableNo: Integer; var Fields: Record Field; UseSystemFields: Boolean): Boolean
@@ -330,7 +329,7 @@ codeunit 50201 PTECalendarJsJsonHelper
             PTECalendarJSViews::fullDay:
                 Fields.SetFilter("No.", '%1..%2', 3, 6);
             PTECalendarJSViews::fullMonth:
-                Fields.SetFilter("No.", '%1..%2|%3|%4|%5', 9, 17, 7, 20, 6);
+                Fields.SetFilter("No.", '%1|%2|%3|%4|%5|%6|%7', 6, 9, 17, 7, 18, 19, 20);
             PTECalendarJSViews::fullWeek:
                 Fields.SetFilter("No.", '%1..%2|%3', 3, 6, 7);
             PTECalendarJSViews::fullYear:
