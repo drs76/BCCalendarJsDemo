@@ -6,20 +6,20 @@ controladdin PTECalendarjsControl
 
     StartupScript = 'src/controladdin/calendar/scripts/ptecalendarjs_start.js';
 
-    StyleSheets = 'src/controladdin/calendar/calendarjs/dist/calendar.js.min.css';
+    StyleSheets = 'src/controladdin/calendar/calendarjs/dist/calendar.js.min.css',
+                    'src/controladdin/calendar/scripts/ptecalendar.css';
 
 
     HorizontalShrink = true;
     HorizontalStretch = true;
     VerticalStretch = true;
     VerticalShrink = false;
-    RequestedHeight = 680;
+    RequestedHeight = 800;
 
     event ControlReady();
     event OnFetchEvents();
     event OnSyncOptionsBC(options: JsonObject);
     event OnSyncSearchOptionsBC(options: JsonObject);
-    event OnAddEvent2BC(entry: JsonObject);
     event OnModEvent2BC(entry: JsonObject);
     event OnRemoveEventFromBC(entry: JsonObject);
 
@@ -33,6 +33,5 @@ controladdin PTECalendarjsControl
     procedure OnSyncOptionsBCResult(result: JsonObject)
     procedure OnSyncSearchOptionsBCResult(result: JsonObject)
     procedure OnModEvent2BCResult(result: JsonObject)
-    procedure OnAddEvent2BCResult(result: JsonObject)
     procedure OnRemoveEventFromBCResult(result: JsonObject)
 }

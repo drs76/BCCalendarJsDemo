@@ -23,7 +23,6 @@ permissionset 50200 BCCalendarJsDemo
         page PTECalendarJsTranslatons = X,
         tabledata PTECalendarJsEvent = RIMD,
         table PTECalendarJsEvent = X,
-        codeunit PTECalendarJsEventSubs = X,
         codeunit PTECalendarPageMgt = X,
         page PTECalendarJsEvents = X,
         page PTECustomerDemo = X;

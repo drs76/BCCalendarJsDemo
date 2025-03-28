@@ -1,7 +1,7 @@
 /// <summary>
 /// ControlAddIn "PTEColorPicker."
 /// </summary>
-controladdin PTEColorPicker
+controladdin PTEColorPickerControl
 {
     Scripts = 'src/controladdin/colorpicker/scripts/jscolor.js', 'src/controladdin/colorpicker/scripts/colorpicker.js';
 

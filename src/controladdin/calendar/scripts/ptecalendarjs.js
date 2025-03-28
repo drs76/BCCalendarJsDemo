@@ -1,32 +1,13 @@
 /*jshint esversion: 8 */
-const bccalendar = new calendarJs();
+var bccalendar = new calendarJs();
 
 function InitCalendar(options, widget) {
   setupCalendar(options, widget);
 }
 
-function applyFlexStyles(element, properties, values) {
-  if (!Array.isArray(properties)) properties = [properties];
-  if (!Array.isArray(values)) values = [values];
-
-  properties.forEach((property, index) => {
-    element.style.setProperty(`flex-${property}`, values[index]);
-  });
-}
-
-function removeStyles(element, properties) {
-  if (!Array.isArray(properties)) properties = [properties];
-
-  properties.forEach((property) => {
-    element.style.removeProperty(property);
-  });
-}
-
 function setupCalendar(newOptions, widget) {
-  const controlAddIn = document.getElementById("controlAddIn");
-  bccalendar = new calendarJs(controlAddIn, {
+  bccalendar = new calendarJs(document.getElementById("controlAddIn"), {
     isWidget: widget,
-    manualEditingEnabled: true,
     onOptionsUpdated: (options) => {
       syncOptionsBC(options);
     },
@@ -38,7 +19,7 @@ function setupCalendar(newOptions, widget) {
         getEvents;
       },
       onEventAdded: (event) => {
-        modEvent2BC(event);
+        addEvent2BC(event);
       },
       onEventUpdated: (event) => {
         modEvent2BC(event);
@@ -52,11 +33,11 @@ function setupCalendar(newOptions, widget) {
 
   bccalendar.turnOnFullScreen();
   newOptions.isWidget = widget;
-  bccalendar.setOptions(newOptions, false);
+  SetOptions(newOptions);
 }
 
 function SetOptions(options) {
-  bccalendar.setOptions(options);
+  bccalendar.setOptions(options, false);
 }
 
 function SetSearchOptions(options) {
@@ -66,6 +47,10 @@ function SetSearchOptions(options) {
 function SetEvents(events) {
   bccalendar.setEventsFromJson(JSON.stringify(events));
   bccalendar.refresh();
+}
+
+function SetViewOptions(options) {
+  bccalendar.SetViewOptions(options);
 }
 
 async function getEvents() {
@@ -85,17 +70,18 @@ async function syncSearchOptionsBC(options) {
 }
 
 async function addEvent2BC(event) {
-  const call = getALEventHandler("OnAddEvent2BC", false);
+  const call = getALEventHandler("OnModEvent2BC", false);
   return await call(event);
 }
 
 async function modEvent2BC(event) {
   const call = getALEventHandler("OnModEvent2BC", false);
-  return await call(event);
+  const res = await call(event);
+  bccalendar.updateEvent(event.id, res, true, false);
 }
 
 async function removeEventFromBC(event) {
-  const call = getALEventHandler("RemoveEventFromBC", false);
+  const call = getALEventHandler("OnRemoveEventFromBC", false);
   return await call(event);
 }
 

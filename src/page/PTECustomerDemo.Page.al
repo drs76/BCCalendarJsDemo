@@ -14,13 +14,6 @@ page 50213 PTECustomerDemo
     {
         area(content)
         {
-            group(General)
-            {
-                field(Name; Rec.Name)
-                {
-                    ApplicationArea = All;
-                }
-            }
             part(CalendarJsPart; PTECalendarJsPart)
             {
                 ApplicationArea = All;
@@ -29,8 +22,12 @@ page 50213 PTECustomerDemo
         }
     }
 
+    var
+        CurrCus: RecordId;
+
     trigger OnAfterGetCurrRecord()
     begin
-        CurrPage.CalendarJsPart.Page.InitCalendarSource(Database::Customer, Rec.SystemId, false);
+        if CurrCus <> Rec.RecordId() then
+            CurrPage.CalendarJsPart.Page.InitCalendarSource(Database::Customer, Rec.SystemId, false);
     end;
 }
