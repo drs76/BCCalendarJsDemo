@@ -124,6 +124,40 @@ page 50212 PTECalendarJsEvents
         }
     }
 
+    actions
+    {
+        area(Processing)
+        {
+            action(Export2Json)
+            {
+                ApplicationArea = All;
+                Caption = 'Export';
+                ToolTip = 'Export Event to Json.';
+                Image = Export;
+
+                trigger OnAction()
+                var
+                    JsonHelper: Codeunit PTECalendarJsJsonHelper;
+                    TempBlob: Codeunit "Temp Blob";
+                    WriteStream: OutStream;
+                    ReadStream: InStream;
+                    Output: JsonObject;
+                    JsonText: Text;
+                    Filename: Text;
+                begin
+                    TempBlob.CreateOutStream(WriteStream, TextEncoding::UTF8);
+
+                    Output := JsonHelper.RecordToJson(Rec);
+                    Output.WriteTo(JsonText);
+                    WriteStream.WriteText(JsonText);
+                    TempBlob.CreateInStream(ReadStream, TextEncoding::UTF8);
+
+                    DownloadFromStream(ReadStream, '', '', '', Filename);
+                end;
+            }
+        }
+    }
+
     var
         DescriptionText: Text;
         CustomTagsText: Text;

@@ -9,6 +9,7 @@
 # Temp files
 .vs/
 .vscode/rad.json
+.vscode/.alcache/
 
 # Others
 ~$*

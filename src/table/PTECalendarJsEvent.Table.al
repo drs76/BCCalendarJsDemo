@@ -188,6 +188,14 @@ table 50204 PTECalendarJsEvent
     internal procedure CreateCalendarEvent() ReturnValue: JsonObject
     begin
         ReturnValue := CalendarJsJsonHelper.RecordToJson(Rec);
+        if Rec.RepeatEvery <> Rec.RepeatEvery::Never then
+            if Rec.repeatEveryCustomValue = 0 then begin
+                if ReturnValue.Contains(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(RepeatEveryCustomValue))) then
+                    ReturnValue.Remove(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(RepeatEveryCustomValue)));
+
+                if ReturnValue.Contains(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(repeatEveryCustomType))) then
+                    ReturnValue.Remove(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(repeatEveryCustomType)));
+            end;
     end;
 
     internal procedure UpdateCalendarEvent(EventJson: Text)
