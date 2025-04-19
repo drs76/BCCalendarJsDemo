@@ -60,9 +60,10 @@ codeunit 50203 PTECalendarJsHelper
         CalendarJsDemo.InitCalendarSource(RecRef.Number(), RecRef.Field(RecRef.SystemIdNo).Value, WidgetMode);
     end;
 
-    internal procedure BuildEvents(TableNo: Integer; KeyData: array[5] of Code[20]) ReturnValue: JsonArray
+    internal procedure BuildEvents(TableNo: Integer; KeyData: array[5] of Code[20]): JsonArray
     var
         CalendarJsEvent: Record PTECalendarJsEvent;
+        OutValue: JsonArray;
     begin
         CalendarJsEvent.Reset();
         CalendarJsEvent.SetRange(TableNo, TableNo);
@@ -74,8 +75,10 @@ codeunit 50203 PTECalendarJsHelper
             exit;
 
         repeat
-            ReturnValue.Add(CalendarJsEvent.CreateCalendarEvent());
+            OutValue.Add(CalendarJsEvent.CreateCalendarEvent());
         until CalendarJsEvent.Next() = 0;
+
+        exit(OutValue);
     end;
 
 }

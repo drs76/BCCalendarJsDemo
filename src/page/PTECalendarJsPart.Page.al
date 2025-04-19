@@ -1,7 +1,7 @@
 page 50203 PTECalendarJsPart
 {
     Caption = 'Calendar';
-    AdditionalSearchTerms = 'calendar';
+    AdditionalSearchTerms = 'Calendar';
     PageType = CardPart;
     UsageCategory = None;
     ApplicationArea = All;

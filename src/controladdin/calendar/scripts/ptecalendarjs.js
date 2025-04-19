@@ -56,7 +56,7 @@ function SetViewOptions(options) {
 async function getEvents() {
   const call = getALEventHandler("OnFetchEvents", false);
   const res = await call();
-  bccalendar.setEventsFromJson(JSON.stringify(res || []));
+  return (JSON.stringify(res || []));
 }
 
 async function syncOptionsBC(options) {
@@ -77,7 +77,6 @@ async function addEvent2BC(event) {
 async function modEvent2BC(event) {
   const call = getALEventHandler("OnModEvent2BC", false);
   const res = await call(event);
-  bccalendar.updateEvent(event.id, res, true, false);
 }
 
 async function removeEventFromBC(event) {
