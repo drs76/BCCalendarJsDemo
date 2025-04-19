@@ -67,7 +67,7 @@ table 50204 PTECalendarJsEvent
         }
         field(15; RepeatEvery; Enum PTECalendarJSRepeatEvery)
         {
-            Caption = 'Repeat Every';
+            Caption = 'RepeatEvery';
         }
         field(16; RepeatEveryExcludeDays; Text[25])
         {
@@ -185,9 +185,21 @@ table 50204 PTECalendarJsEvent
         CalendarJsJsonHelper: Codeunit PTECalendarJsJsonHelper;
 
 
-    internal procedure CreateCalendarEvent() ReturnValue: JsonObject
+    internal procedure CreateCalendarEvent(): JsonObject
+    var
+        OutValue: JsonObject;
     begin
-        ReturnValue := CalendarJsJsonHelper.RecordToJson(Rec);
+        OutValue := CalendarJsJsonHelper.RecordToJson(Rec);
+        if Rec.RepeatEvery <> Rec.RepeatEvery::Never then
+            if Rec.RepeatEvery <> Rec.RepeatEvery::Custom then begin
+                if OutValue.Contains(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(RepeatEveryCustomValue))) then
+                    OutValue.Replace(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(RepeatEveryCustomValue)), Rec.RepeatEvery.AsInteger());
+
+                if OutValue.Contains(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(RepeatEveryCustomType))) then
+                    OutValue.Replace(CalendarJsJsonHelper.GetSafeFieldName(Rec.FieldCaption(RepeatEveryCustomType)), 0);
+            end;
+
+        exit(OutValue);
     end;
 
     internal procedure UpdateCalendarEvent(EventJson: Text)
