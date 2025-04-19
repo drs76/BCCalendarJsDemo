@@ -358,7 +358,7 @@ codeunit 50201 PTECalendarJsJsonHelper
     var
         AppendLbl: Label '%1%2';
     begin
-        ReturnValue := StrSubstNo(AppendLbl, LowerCase(Format(FieldCaption[1])), CopyStr(FieldCaption, 2, StrLen(ReturnValue)));
+        ReturnValue := StrSubstNo(AppendLbl, LowerCase(Format(FieldCaption[1])), CopyStr(FieldCaption, 2));
     end;
 
     internal procedure JsonToRecord(var RecRef: RecordRef; CalEvent: JsonObject)
