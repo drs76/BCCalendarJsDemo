@@ -57,6 +57,7 @@ async function getEvents() {
   const call = getALEventHandler("OnFetchEvents", false);
   const res = await call();
   return (JSON.stringify(res || []));
+  return (JSON.stringify(res || []));
 }
 
 async function syncOptionsBC(options) {
